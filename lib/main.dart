@@ -3,7 +3,8 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:redditech/api/endpoints/profile.dart';
 import 'package:redditech/utils/secrets.dart';
-import 'package:redditech/widgets/login.dart';
+import 'package:redditech/views/login.dart';
+import 'package:redditech/views/profile.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 
@@ -55,6 +56,7 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   bool isLoading = true;
   String profileName = "";
+  String profilPicture = "";
 
   @override
   void initState() {
@@ -67,6 +69,7 @@ class _MyHomePageState extends State<MyHomePage> {
     await apiProfile.fetch();
     setState(() {
       profileName = apiProfile.getDisplayName();
+      profilPicture = apiProfile.getPicture();
       isLoading = false;
     });
   }
@@ -81,11 +84,25 @@ class _MyHomePageState extends State<MyHomePage> {
     // than having to individually change instances of widgets.
     return Scaffold(
       appBar: AppBar(
-        // Here we take the value from the MyHomePage object that was created by
-        // the App.build method, and use it to set our appbar title.
-        title: Text(widget.title),
-        backgroundColor: Colors.deepOrange,
-      ),
+          // Here we take the value from the MyHomePage object that was created by
+          // the App.build method, and use it to set our appbar title.
+          title: Text(widget.title),
+          backgroundColor: Colors.deepOrange,
+          actions: <Widget>[
+            InkWell(
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => ProfilePage()),
+                );
+              },
+              child: Image.network(
+                profilPicture,
+                height: 30,
+                width: 30,
+              ),
+            )
+          ]),
       body: Center(
         // Center is a layout widget. It takes a single child and positions it
         // in the middle of the parent.

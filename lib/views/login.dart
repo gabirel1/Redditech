@@ -6,6 +6,7 @@ import 'package:redditech/utils/secrets.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:uni_links/uni_links.dart';
+import 'package:webview_flutter/webview_flutter.dart';
 
 var isLoading = true;
 
@@ -108,11 +109,11 @@ class _LoginPageState extends State<LoginPage> {
                   child: Text("Se connecter"),
                   onPressed: () => login(),
                 ),
-          // child: WebView(
-          //     initialUrl:
-          //         "https://www.reddit.com/api/v1/authorize?client_id=43f_kbRMOb3mU8z5wc7jvw&response_type=code&state=dzadzadDZADAZDD151565&duration=permanent&scope=identity&redirect_uri=com.dogito.redditech://login-callback",
-          //     javascriptMode: JavascriptMode.unrestricted,
-          //     userAgent: "random"))
         ));
+    // child: WebView(
+    //     initialUrl:
+    //         "$redditAPIBaseURL/authorize?client_id=$redditClientID&response_type=token&scope=$redditScope&state=$redditState&redirect_uri=$redirectUri",
+    //     javascriptMode: JavascriptMode.unrestricted,
+    //     userAgent: "random")));
   }
 }

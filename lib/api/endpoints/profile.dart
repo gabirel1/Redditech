@@ -8,11 +8,15 @@ class APIProfile {
   APIProfile();
 
   fetch() async {
-    var response = await fetchAPI("me");
+    var response = await getAPI("me");
     data = jsonDecode(response.body);
   }
 
   getDisplayName() {
     return data["subreddit"]["display_name"];
+  }
+
+  getPicture() {
+    return data["subreddit"]["icon_img"];
   }
 }
