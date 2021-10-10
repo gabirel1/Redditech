@@ -7,6 +7,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:uni_links/uni_links.dart';
 
+var isLoading = true;
+
 class LoginPage extends StatefulWidget {
   LoginPage({Key? key}) : super(key: key);
 
@@ -45,6 +47,10 @@ class _LoginPageState extends State<LoginPage> {
         context,
         MaterialPageRoute(builder: (context) => MyHomePage(title: "Redditech")),
       );
+    } else {
+      setState(() {
+        isLoading = false;
+      });
     }
   }
 
@@ -96,10 +102,12 @@ class _LoginPageState extends State<LoginPage> {
           backgroundColor: Colors.deepOrange,
         ),
         body: Center(
-          child: ElevatedButton(
-            child: Text("Se connecter"),
-            onPressed: () => login(),
-          ),
+          child: isLoading
+              ? CircularProgressIndicator()
+              : ElevatedButton(
+                  child: Text("Se connecter"),
+                  onPressed: () => login(),
+                ),
           // child: WebView(
           //     initialUrl:
           //         "https://www.reddit.com/api/v1/authorize?client_id=43f_kbRMOb3mU8z5wc7jvw&response_type=code&state=dzadzadDZADAZDD151565&duration=permanent&scope=identity&redirect_uri=com.dogito.redditech://login-callback",

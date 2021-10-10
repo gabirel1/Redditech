@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:redditech/api/endpoints/profile.dart';
 import 'package:redditech/utils/secrets.dart';
 import 'package:redditech/widgets/login.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -62,20 +63,11 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   void loadData() async {
-    final prefs = await SharedPreferences.getInstance();
-    var accessToken = prefs.getString('access_token');
-
-    var profile = await fetchProfile(accessToken);
-    this.profileName = jsonDecode(profile.body)["subreddit"]["display_name"];
+    APIProfile apiProfile = APIProfile();
+    await apiProfile.fetch();
     setState(() {
+      profileName = apiProfile.getDisplayName();
       isLoading = false;
-    });
-  }
-
-  Future<http.Response> fetchProfile(accessToken) {
-    return http.get(Uri.parse('$redditAPIOAuthBaseURL/me'), headers: {
-      "Authorization": "Bearer $accessToken",
-      "User-Agent": "Redditech/1.0.0 (by /u/redditech)"
     });
   }
 
