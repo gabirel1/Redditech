@@ -40,7 +40,7 @@ android {
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
         manifestPlaceholders = [
-                'appAuthRedirectScheme': 'com.dogito.redditech'
+                'appAuthRedirectScheme': 'com.dogito.redditech://login-callback'
         ]
     }
 
