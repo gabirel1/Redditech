@@ -1,7 +1,11 @@
-import 'dart:io';
+import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:webview_flutter/webview_flutter.dart';
+import 'package:redditech/main.dart';
+import 'package:redditech/utils/secrets.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:url_launcher/url_launcher.dart';
+import 'package:uni_links/uni_links.dart';
 
 class LoginPage extends StatefulWidget {
   LoginPage({Key? key}) : super(key: key);
@@ -22,13 +26,60 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-
   @override
   void initState() {
     super.initState();
     // Enable hybrid composition.
-    if (Platform.isAndroid) WebView.platform = SurfaceAndroidWebView();
+    // if (Platform.isAndroid) WebView.platform = SurfaceAndroidWebView();
+    initUniLinks();
+    checkLogin();
   }
+
+  void checkLogin() async {
+    final prefs = await SharedPreferences.getInstance();
+    var code = prefs.getString('authCode');
+    print('code $code');
+    if (code != null) {
+      print("User already logged in!");
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => MyHomePage(title: "Redditech")),
+      );
+    }
+  }
+
+  void login() {
+    _launchURL(
+        "$redditAPIBaseURL/authorize?client_id=$redditClientID&response_type=code&scope=$redditScope&state=$redditState&redirect_uri=$redirectUri");
+  }
+
+  late StreamSubscription _sub;
+
+  Future<void> initUniLinks() async {
+    _sub = uriLinkStream.listen((Uri? link) async {
+      var code = link!.queryParameters['code'];
+      var state = link.queryParameters['state'];
+      if (code != null &&
+          link.toString().contains(redirectUri) &&
+          state == redditState) {
+        final prefs = await SharedPreferences.getInstance();
+        await prefs.setString('authCode', code);
+        _sub.cancel();
+        print("User logged in!");
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+              builder: (context) => MyHomePage(title: "Redditech")),
+        );
+      }
+    }, onError: (err) {
+      // Handle exception by warning the user their action did not succeed
+    });
+  }
+
+  void _launchURL(_url) async => await canLaunch(_url)
+      ? await launch(_url)
+      : throw 'Could not launch $_url';
 
   @override
   Widget build(BuildContext context) {
@@ -39,20 +90,22 @@ class _LoginPageState extends State<LoginPage> {
     // fast, so that you can just rebuild anything that needs updating rather
     // than having to individually change instances of widgets.
     return Scaffold(
-      appBar: AppBar(
-        // Here we take the value from the MyHomePage object that was created by
-        // the App.build method, and use it to set our appbar title.
-        title: Text(widget.title),
-        backgroundColor: Colors.deepOrange,
-      ),
-      body: Center(
-        // Center is a layout widget. It takes a single child and positions it
-        // in the middle of the parent.
-        child:  WebView(
-          initialUrl:
-          "https://www.reddit.com/api/v1/authorize?client_id=43f_kbRMOb3mU8z5wc7jvw&response_type=code&state=dzadzadDZADAZDD151565&duration=permanent&scope=identity&redirect_uri=com.dogito.redditech://login-callback",
-        )
-      ),
-    );
+        appBar: AppBar(
+          // Here we take the value from the MyHomePage object that was created by
+          // the App.build method, and use it to set our appbar title.
+          title: Text(widget.title),
+          backgroundColor: Colors.deepOrange,
+        ),
+        body: Center(
+          child: ElevatedButton(
+            child: Text("Se connecter"),
+            onPressed: () => login(),
+          ),
+          // child: WebView(
+          //     initialUrl:
+          //         "https://www.reddit.com/api/v1/authorize?client_id=43f_kbRMOb3mU8z5wc7jvw&response_type=code&state=dzadzadDZADAZDD151565&duration=permanent&scope=identity&redirect_uri=com.dogito.redditech://login-callback",
+          //     javascriptMode: JavascriptMode.unrestricted,
+          //     userAgent: "random"))
+        ));
   }
 }

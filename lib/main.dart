@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:redditech/utils/secrets.dart';
 import 'package:redditech/widgets/login.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:http/http.dart' as http;
 
 void main() {
   runApp(MyApp());
@@ -23,7 +26,6 @@ class MyApp extends StatelessWidget {
         // is not restarted.
         primarySwatch: Colors.blue,
       ),
-      // home: MyHomePage(title: 'Redditech'),
       home: LoginPage(),
     );
   }
@@ -48,17 +50,19 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
+  @override
+  void initState() {
+    super.initState();
+    loadData();
+  }
 
-  void _incrementCounter() {
-    setState(() {
-      // This call to setState tells the Flutter framework that something has
-      // changed in this State, which causes it to rerun the build method below
-      // so that the display can reflect the updated values. If we changed
-      // _counter without calling setState(), then the build method would not be
-      // called again, and so nothing would appear to happen.
-      _counter++;
-    });
+  void loadData() async {
+    var profile = await fetchProfile();
+    print(profile.body);
+  }
+
+  Future<http.Response> fetchProfile() {
+    return http.get(Uri.parse('$redditAPIBaseURL/me'));
   }
 
   @override
@@ -97,19 +101,22 @@ class _MyHomePageState extends State<MyHomePage> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             Text(
-              'You have pushed the button this many times:',
+              'Welcome',
             ),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headline4,
+            ElevatedButton(
+              child: Text('Logout'),
+              onPressed: () async {
+                final prefs = await SharedPreferences.getInstance();
+                prefs.remove('authCode');
+                Navigator.of(context).pushReplacement(
+                  MaterialPageRoute(
+                    builder: (context) => LoginPage(),
+                  ),
+                );
+              },
             ),
           ],
         ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: Icon(Icons.add),
       ), // This trailing comma makes auto-formatting nicer for build methods.
     );
   }
