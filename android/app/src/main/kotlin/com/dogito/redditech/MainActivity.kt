@@ -1,4 +1,4 @@
-package com.example.redditech
+package com.dogito.redditech
 
 import io.flutter.embedding.android.FlutterActivity
 
