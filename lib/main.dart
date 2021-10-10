@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:redditech/utils/secrets.dart';
 import 'package:redditech/widgets/login.dart';
@@ -50,6 +52,9 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  bool isLoading = true;
+  String profileName = "";
+
   @override
   void initState() {
     super.initState();
@@ -57,12 +62,21 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   void loadData() async {
-    var profile = await fetchProfile();
-    print(profile.body);
+    final prefs = await SharedPreferences.getInstance();
+    var accessToken = prefs.getString('access_token');
+
+    var profile = await fetchProfile(accessToken);
+    this.profileName = jsonDecode(profile.body)["subreddit"]["display_name"];
+    setState(() {
+      isLoading = false;
+    });
   }
 
-  Future<http.Response> fetchProfile() {
-    return http.get(Uri.parse('$redditAPIBaseURL/me'));
+  Future<http.Response> fetchProfile(accessToken) {
+    return http.get(Uri.parse('$redditAPIOAuthBaseURL/me'), headers: {
+      "Authorization": "Bearer $accessToken",
+      "User-Agent": "Redditech/1.0.0 (by /u/redditech)"
+    });
   }
 
   @override
@@ -99,23 +113,25 @@ class _MyHomePageState extends State<MyHomePage> {
           // axis because Columns are vertical (the cross axis would be
           // horizontal).
           mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Text(
-              'Welcome',
-            ),
-            ElevatedButton(
-              child: Text('Logout'),
-              onPressed: () async {
-                final prefs = await SharedPreferences.getInstance();
-                prefs.remove('authCode');
-                Navigator.of(context).pushReplacement(
-                  MaterialPageRoute(
-                    builder: (context) => LoginPage(),
+          children: isLoading
+              ? <Widget>[CircularProgressIndicator()]
+              : <Widget>[
+                  Text(
+                    'Welcome, $profileName',
                   ),
-                );
-              },
-            ),
-          ],
+                  ElevatedButton(
+                    child: Text('Logout'),
+                    onPressed: () async {
+                      final prefs = await SharedPreferences.getInstance();
+                      prefs.remove('access_token');
+                      Navigator.of(context).pushReplacement(
+                        MaterialPageRoute(
+                          builder: (context) => LoginPage(),
+                        ),
+                      );
+                    },
+                  ),
+                ],
         ),
       ), // This trailing comma makes auto-formatting nicer for build methods.
     );

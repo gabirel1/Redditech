@@ -37,9 +37,9 @@ class _LoginPageState extends State<LoginPage> {
 
   void checkLogin() async {
     final prefs = await SharedPreferences.getInstance();
-    var code = prefs.getString('authCode');
-    print('code $code');
-    if (code != null) {
+    var accessToken = prefs.getString('access_token');
+    print('accessToken $accessToken');
+    if (accessToken != null) {
       print("User already logged in!");
       Navigator.pushReplacement(
         context,
@@ -50,20 +50,19 @@ class _LoginPageState extends State<LoginPage> {
 
   void login() {
     _launchURL(
-        "$redditAPIBaseURL/authorize?client_id=$redditClientID&response_type=code&scope=$redditScope&state=$redditState&redirect_uri=$redirectUri");
+        "$redditAPIBaseURL/authorize?client_id=$redditClientID&response_type=token&scope=$redditScope&state=$redditState&redirect_uri=$redirectUri");
   }
 
   late StreamSubscription _sub;
 
   Future<void> initUniLinks() async {
     _sub = uriLinkStream.listen((Uri? link) async {
-      var code = link!.queryParameters['code'];
-      var state = link.queryParameters['state'];
-      if (code != null &&
-          link.toString().contains(redirectUri) &&
-          state == redditState) {
+      String linkStr = link.toString();
+      if (linkStr.contains('access_token') &&
+          link.toString().contains(redirectUri)) {
+        var accessToken = linkStr.split('access_token=')[1].split('&')[0];
         final prefs = await SharedPreferences.getInstance();
-        await prefs.setString('authCode', code);
+        await prefs.setString('access_token', accessToken);
         _sub.cancel();
         print("User logged in!");
         Navigator.pushReplacement(
