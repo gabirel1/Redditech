@@ -76,12 +76,6 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
-    // This method is rerun every time setState is called, for instance as done
-    // by the _incrementCounter method above.
-    //
-    // The Flutter framework has been optimized to make rerunning build methods
-    // fast, so that you can just rebuild anything that needs updating rather
-    // than having to individually change instances of widgets.
     return Scaffold(
       appBar: AppBar(
           // Here we take the value from the MyHomePage object that was created by
@@ -122,25 +116,8 @@ class _MyHomePageState extends State<MyHomePage> {
           // axis because Columns are vertical (the cross axis would be
           // horizontal).
           mainAxisAlignment: MainAxisAlignment.center,
-          children: isLoading
-              ? <Widget>[CircularProgressIndicator()]
-              : <Widget>[
-                  Text(
-                    'Welcome, $profileName',
-                  ),
-                  ElevatedButton(
-                    child: Text('Logout'),
-                    onPressed: () async {
-                      final prefs = await SharedPreferences.getInstance();
-                      prefs.remove('access_token');
-                      Navigator.of(context).pushReplacement(
-                        MaterialPageRoute(
-                          builder: (context) => LoginPage(),
-                        ),
-                      );
-                    },
-                  ),
-                ],
+          children:
+              isLoading ? <Widget>[CircularProgressIndicator()] : <Widget>[],
         ),
       ), // This trailing comma makes auto-formatting nicer for build methods.
     );

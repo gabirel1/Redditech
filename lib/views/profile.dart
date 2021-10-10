@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:redditech/api/endpoints/profile.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
+import 'login.dart';
 
 var isLoading = true;
 
@@ -21,38 +25,53 @@ class ProfilePage extends StatefulWidget {
 }
 
 class _ProfilePageState extends State<ProfilePage> {
+  String profileName = "";
+  String profilPicture = "";
+
   @override
   void initState() {
     super.initState();
+    loadData();
+  }
+
+  void loadData() async {
+    APIProfile apiProfile = APIProfile();
+    await apiProfile.fetch();
+    setState(() {
+      profileName = apiProfile.getDisplayName();
+      profilPicture = apiProfile.getPicture();
+      isLoading = false;
+    });
   }
 
   @override
   Widget build(BuildContext context) {
-    // This method is rerun every time setState is called, for instance as done
-    // by the _incrementCounter method above.
-    //
-    // The Flutter framework has been optimized to make rerunning build methods
-    // fast, so that you can just rebuild anything that needs updating rather
-    // than having to individually change instances of widgets.
     return Scaffold(
         appBar: AppBar(
-          // Here we take the value from the MyHomePage object that was created by
-          // the App.build method, and use it to set our appbar title.
           title: Text(widget.title),
           backgroundColor: Colors.deepOrange,
         ),
         body: Center(
-          child: isLoading
-              ? CircularProgressIndicator()
-              : ElevatedButton(
-                  child: Text("Se connecter"),
-                  onPressed: () => {},
-                ),
-        ));
-    // child: WebView(
-    //     initialUrl:
-    //         "$redditAPIBaseURL/authorize?client_id=$redditClientID&response_type=token&scope=$redditScope&state=$redditState&redirect_uri=$redirectUri",
-    //     javascriptMode: JavascriptMode.unrestricted,
-    //     userAgent: "random")));
+            child: Column(
+                // mainAxisAlignment: MainAxisAlignment.center,
+                children: isLoading
+                    ? [CircularProgressIndicator()]
+                    : [
+                        Text(
+                          'Welcome, $profileName',
+                        ),
+                        ElevatedButton(
+                          child: Text('Logout'),
+                          onPressed: () async {
+                            final prefs = await SharedPreferences.getInstance();
+                            prefs.remove('access_token');
+                            Navigator.of(context).pushAndRemoveUntil(
+                                MaterialPageRoute(
+                                    builder: (BuildContext context) =>
+                                        LoginPage()),
+                                (Route<dynamic> route) => false);
+                          },
+                        ),
+                      ])));
   }
 }
