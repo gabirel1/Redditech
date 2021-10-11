@@ -40,6 +40,7 @@ class _LoginPageState extends State<LoginPage> {
 
   void checkLogin() async {
     final prefs = await SharedPreferences.getInstance();
+    // prefs.remove('access_token');
     var accessToken = prefs.getString('access_token');
     print('accessToken $accessToken');
     if (accessToken != null) {
@@ -71,6 +72,7 @@ class _LoginPageState extends State<LoginPage> {
         final prefs = await SharedPreferences.getInstance();
         await prefs.setString('access_token', accessToken);
         _sub.cancel();
+        print('accessToken $accessToken');
         print("User logged in!");
         Navigator.pushReplacement(
           context,

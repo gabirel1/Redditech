@@ -56,7 +56,7 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   bool isLoading = true;
   String profileName = "";
-  String profilPicture = "";
+  String profilePicture = "";
 
   @override
   void initState() {
@@ -69,7 +69,7 @@ class _MyHomePageState extends State<MyHomePage> {
     await apiProfile.fetch();
     setState(() {
       profileName = apiProfile.getDisplayName();
-      profilPicture = apiProfile.getPicture();
+      profilePicture = apiProfile.getProfilePicture();
       isLoading = false;
     });
   }
@@ -91,7 +91,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 );
               },
               child: Image.network(
-                profilPicture,
+                profilePicture,
                 height: 30,
                 width: 30,
               ),

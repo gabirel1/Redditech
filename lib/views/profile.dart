@@ -1,3 +1,5 @@
+import 'dart:ffi';
+
 import 'package:flutter/material.dart';
 import 'package:redditech/api/endpoints/profile.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -18,7 +20,7 @@ class ProfilePage extends StatefulWidget {
   // used by the build method of the State. Fields in a Widget subclass are
   // always marked "final".
 
-  final String title = "Mon Profil";
+  final String title = "Mon Profile";
 
   @override
   _ProfilePageState createState() => _ProfilePageState();
@@ -26,7 +28,9 @@ class ProfilePage extends StatefulWidget {
 
 class _ProfilePageState extends State<ProfilePage> {
   String profileName = "";
-  String profilPicture = "";
+  String profilePicture = "";
+  String profileBanner = "";
+  String profileDescription = "";
 
   @override
   void initState() {
@@ -39,7 +43,9 @@ class _ProfilePageState extends State<ProfilePage> {
     await apiProfile.fetch();
     setState(() {
       profileName = apiProfile.getDisplayName();
-      profilPicture = apiProfile.getPicture();
+      profilePicture = apiProfile.getProfilePicture();
+      profileBanner = apiProfile.getBannerPicture();
+      profileDescription = apiProfile.getDescription();
       isLoading = false;
     });
   }
@@ -57,8 +63,22 @@ class _ProfilePageState extends State<ProfilePage> {
                 children: isLoading
                     ? [CircularProgressIndicator()]
                     : [
+                        Image.network(
+                          profileBanner,
+                          // height: 384,
+                          // width: 1280,
+                        ),
+                        Image.network(
+                          profilePicture,
+                          width: 65,
+                          height: 65,
+                        ),
                         Text(
-                          'Welcome, $profileName',
+                          profileName,
+                          style: TextStyle(fontSize: 20),
+                        ),
+                        Text(
+                          profileDescription,
                         ),
                         ElevatedButton(
                           child: Text('Logout'),

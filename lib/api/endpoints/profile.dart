@@ -13,10 +13,32 @@ class APIProfile {
   }
 
   getDisplayName() {
+    print(data);
     return data["subreddit"]["display_name"];
   }
 
-  getPicture() {
+  getProfilePicture() {
     return data["subreddit"]["icon_img"];
+  }
+
+  getBannerPicture() {
+    String bannerURL = data["subreddit"]["banner_img"];
+    return bannerURL.replaceAll("amp;", "");
+  }
+
+  getBannerSize() {
+    return data["subreddit"]["banner_size"];
+  }
+
+  getKarma() {
+    return data["total_karma"];
+  }
+
+  getSubs() {
+    return data["subreddit"]["subscribers"];
+  }
+
+  getDescription() {
+    return data["subreddit"]["public_description"];
   }
 }
