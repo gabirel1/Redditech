@@ -1,12 +1,10 @@
 import 'dart:async';
-
 import 'package:flutter/material.dart';
+import 'package:flutter_web_browser/flutter_web_browser.dart';
 import 'package:redditech/main.dart';
 import 'package:redditech/utils/secrets.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:url_launcher/url_launcher.dart';
 import 'package:uni_links/uni_links.dart';
-import 'package:webview_flutter/webview_flutter.dart';
 
 var isLoading = true;
 
@@ -42,6 +40,7 @@ class _LoginPageState extends State<LoginPage> {
     final prefs = await SharedPreferences.getInstance();
     // prefs.remove('access_token');
     var accessToken = prefs.getString('access_token');
+
     print('accessToken $accessToken');
     if (accessToken != null) {
       print("User already logged in!");
@@ -56,9 +55,10 @@ class _LoginPageState extends State<LoginPage> {
     }
   }
 
-  void login() {
-    _launchURL(
-        "$redditAPIBaseURL/authorize?client_id=$redditClientID&response_type=token&scope=$redditScope&state=$redditState&redirect_uri=$redirectUri");
+  void login() async {
+    FlutterWebBrowser.openWebPage(
+        url:
+            "$redditAPIBaseURL/authorize?client_id=$redditClientID&response_type=token&scope=$redditScope&state=$redditState&redirect_uri=$redirectUri");
   }
 
   late StreamSubscription _sub;
@@ -84,10 +84,6 @@ class _LoginPageState extends State<LoginPage> {
       // Handle exception by warning the user their action did not succeed
     });
   }
-
-  void _launchURL(_url) async => await canLaunch(_url)
-      ? await launch(_url)
-      : throw 'Could not launch $_url';
 
   @override
   Widget build(BuildContext context) {
