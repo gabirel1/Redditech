@@ -30,8 +30,6 @@ class _LoginPageState extends State<LoginPage> {
   @override
   void initState() {
     super.initState();
-    // Enable hybrid composition.
-    // if (Platform.isAndroid) WebView.platform = SurfaceAndroidWebView();
     initUniLinks();
     checkLogin();
   }
@@ -58,7 +56,7 @@ class _LoginPageState extends State<LoginPage> {
   void login() async {
     FlutterWebBrowser.openWebPage(
         url:
-            "$redditAPIBaseURL/authorize?client_id=$redditClientID&response_type=token&scope=$redditScope&state=$redditState&redirect_uri=$redirectUri");
+            Uri.encodeFull("$redditAPIBaseURL/authorize?client_id=$redditClientID&response_type=token&scope=$redditScope&state=$redditState&redirect_uri=$redirectUri"));
   }
 
   late StreamSubscription _sub;
