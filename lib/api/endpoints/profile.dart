@@ -23,6 +23,7 @@ class APIProfile {
 
   getBannerPicture() {
     String bannerURL = data["subreddit"]["banner_img"];
+    print("url == $bannerURL");
     return bannerURL.replaceAll("amp;", "");
   }
 
