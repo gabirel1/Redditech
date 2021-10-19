@@ -1,4 +1,6 @@
 import 'dart:convert';
+import 'dart:ffi';
+import 'package:intl/intl.dart';
 
 import 'package:redditech/api/utils.dart';
 
@@ -18,7 +20,18 @@ class APIProfile {
   }
 
   getProfilePicture() {
-    return data["subreddit"]["icon_img"];
+    // return (data["subreddit"]["icon_img"])
+    //     ? data["subreddit"]["icon_img"]
+    //     : data["snoovatar_img"];
+    // if (data["subreddit"]["icon_img"] == "") {
+    //   print("connard");
+    //   return data["snoovatar_img"];
+    // }
+    if (data["snoovatar_img"] == "") {
+      return (data["subreddit"]["icon_img"]);
+    } else {
+      return data["snoovatar_img"];
+    }
   }
 
   getBannerPicture() {
@@ -41,5 +54,26 @@ class APIProfile {
 
   getDescription() {
     return data["subreddit"]["public_description"];
+  }
+
+  getTimeSinceCreation() {
+    double createdAt = data["created_utc"];
+
+    var today = DateTime.now();
+    int createdAtMilliseconds = createdAt.toInt() * 1000;
+    var createdAtDate =
+        DateTime.fromMillisecondsSinceEpoch(createdAtMilliseconds);
+    int timeInDay = today.difference(createdAtDate).inDays;
+    print(timeInDay);
+    return timeInDay.toString();
+  }
+
+  getDateOfCreation() {
+    double createdAt = data["created_utc"];
+    int createdAtMilliseconds = createdAt.toInt() * 1000;
+    var createdAtDate =
+        DateTime.fromMillisecondsSinceEpoch(createdAtMilliseconds);
+    var formatted = DateFormat("dd MMMM yyyy").format(createdAtDate);
+    return formatted.toString();
   }
 }

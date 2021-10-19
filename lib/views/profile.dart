@@ -29,6 +29,10 @@ class _ProfilePageState extends State<ProfilePage> {
   String profilePicture = "";
   String profileBanner = "";
   String profileDescription = "";
+  String karmaNumber = "";
+  String subsNumber = "";
+  String timeInDaySinceCreation = "";
+  String dateOfCreation = "";
 
   @override
   void initState() {
@@ -44,6 +48,10 @@ class _ProfilePageState extends State<ProfilePage> {
       profilePicture = apiProfile.getProfilePicture();
       profileBanner = apiProfile.getBannerPicture();
       profileDescription = apiProfile.getDescription();
+      karmaNumber = apiProfile.getKarma().toString();
+      subsNumber = apiProfile.getSubs().toString();
+      timeInDaySinceCreation = apiProfile.getTimeSinceCreation();
+      dateOfCreation = apiProfile.getDateOfCreation();
       isLoading = false;
     });
   }
@@ -68,13 +76,48 @@ class _ProfilePageState extends State<ProfilePage> {
                         ),
                         Image.network(
                           profilePicture,
-                          width: 65,
-                          height: 65,
+                          width: 130,
+                          height: 130,
                         ),
                         Text(
                           profileName,
-                          style: TextStyle(fontSize: 20),
+                          style: TextStyle(fontSize: 30),
                         ),
+                        Center(
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text(
+                                karmaNumber + " karma · ",
+                                style: TextStyle(fontSize: 18),
+                              ),
+                              Text(
+                                timeInDaySinceCreation + " j · ",
+                                style: TextStyle(fontSize: 18),
+                              ),
+                              Text(
+                                dateOfCreation + " · ",
+                                style: TextStyle(fontSize: 18),
+                              ),
+                              Text(
+                                subsNumber + " abonné(s)",
+                                style: TextStyle(fontSize: 18),
+                              ),
+                            ],
+                          ),
+                        ),
+                        // Center(
+                        //   child: Row(
+                        //     mainAxisAlignment: MainAxisAlignment.center,
+                        //     children: [
+                        //       Text(
+                        //         karmaNumber,
+                        //         style: TextStyle(fontSize: 20),
+                        //       )
+                        //       Text("salute"),
+                        //     ],
+                        //   ),
+                        // ),
                         Text(
                           profileDescription,
                         ),
