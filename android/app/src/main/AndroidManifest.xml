@@ -39,7 +39,7 @@
             <!-- Accepts URIs that begin with https://YOUR_HOST -->
             <data
               android:scheme="https"
-              android:host="redditech.dogito.com" />
+              android:host="redditech.dogito2.com" />
           </intent-filter>
         </activity>
         <!-- Don't delete the meta-data below.
