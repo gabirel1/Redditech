@@ -62,7 +62,49 @@ class _ProfilePageState extends State<ProfilePage> {
       appBar: AppBar(
         title: Text(widget.title),
         backgroundColor: Colors.deepOrange,
-        actions: <Widget>[
+        actions: [
+          PopupMenuButton(
+            color: Colors.black,
+            itemBuilder: (context) => [
+              PopupMenuItem(
+                value: "settings",
+                child: ListTile(
+                  leading: Icon(
+                    Icons.settings,
+                  ),
+                  title: Text(
+                    "Settings",
+                  ),
+                ),
+              ),
+              PopupMenuItem(
+                value: "logout",
+                child: ListTile(
+                  leading: Icon(
+                    Icons.logout,
+                  ),
+                  title: Text(
+                    "Logout",
+                  ),
+                ),
+              ),
+            ],
+            onSelected: (String menu) async {
+              if (menu == "settings") {
+              } else if (menu == "logout") {
+                final prefs = await SharedPreferences.getInstance();
+                prefs.remove('access_token');
+                Navigator.of(context).pushAndRemoveUntil(
+                    MaterialPageRoute(
+                        builder: (BuildContext context) => LoginPage()),
+                    (Route<dynamic> route) => false);
+              } else {
+                print("cancelled ?");
+              }
+            },
+          ),
+        ],
+/*         actions: <Widget>[
           InkWell(
             onTap: () async {
               final prefs = await SharedPreferences.getInstance();
@@ -84,7 +126,7 @@ class _ProfilePageState extends State<ProfilePage> {
             //   width: 30,
             // ),
           ),
-        ],
+        ], */
       ),
       backgroundColor: Colors.black,
       body: Center(
@@ -103,7 +145,7 @@ class _ProfilePageState extends State<ProfilePage> {
                       Center(
                         child: Padding(
                           padding: const EdgeInsets.only(
-                            top: 35.0,
+                            top: 20.0,
                           ),
                           child: Image.network(
                             profilePicture,
