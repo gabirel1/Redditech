@@ -64,7 +64,6 @@ class _ProfilePageState extends State<ProfilePage> {
         backgroundColor: Colors.deepOrange,
         actions: [
           PopupMenuButton(
-            color: Colors.black,
             itemBuilder: (context) => [
               PopupMenuItem(
                 value: "settings",
