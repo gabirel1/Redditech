@@ -59,112 +59,230 @@ class _ProfilePageState extends State<ProfilePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-            title: Text(widget.title),
-            backgroundColor: Colors.deepOrange,
-            actions: <Widget>[
-              InkWell(
-                onTap: () async {
-                  final prefs = await SharedPreferences.getInstance();
-                  prefs.remove('access_token');
-                  Navigator.of(context).pushAndRemoveUntil(
-                      MaterialPageRoute(
-                          builder: (BuildContext context) => LoginPage()),
-                      (Route<dynamic> route) => false);
-                },
-                child: Icon(Icons.logout),
-                // child: IconButton(
-                //   icon: const Icon(Icons.logout),
-                // ),
-                // child: Image.network(
-                //   profilePicture,
-                //   height: 30,
-                //   width: 30,
-                // ),
-              )
-            ]),
-        backgroundColor: Colors.black,
-        body: Center(
-            child: Column(
-                // mainAxisAlignment: MainAxisAlignment.center,
-                children: isLoading
-                    ? [CircularProgressIndicator()]
-                    : [
-                        Stack(
-                          children: [
-                            Image.network(
-                              profileBanner,
-                            ),
-                            Center(
-                              child: Padding(
-                                padding: const EdgeInsets.only(top: 45.0),
-                                child: Image.network(
-                                  profilePicture,
-                                  width: 160,
-                                  height: 160,
-                                ),
-                              ),
-                              // margin: const EdgeInsets.only(top: 10.0),
-                            ),
-                          ],
+      appBar: AppBar(
+        title: Text(widget.title),
+        backgroundColor: Colors.deepOrange,
+        actions: <Widget>[
+          InkWell(
+            onTap: () async {
+              final prefs = await SharedPreferences.getInstance();
+              prefs.remove('access_token');
+              Navigator.of(context).pushAndRemoveUntil(
+                  MaterialPageRoute(
+                      builder: (BuildContext context) => LoginPage()),
+                  (Route<dynamic> route) => false);
+            },
+            child: Icon(
+              Icons.logout,
+            ),
+            // child: IconButton(
+            //   icon: const Icon(Icons.logout),
+            // ),
+            // child: Image.network(
+            //   profilePicture,
+            //   height: 30,
+            //   width: 30,
+            // ),
+          ),
+        ],
+      ),
+      backgroundColor: Colors.black,
+      body: Center(
+        child: Column(
+          // mainAxisAlignment: MainAxisAlignment.center,
+          children: isLoading
+              ? [
+                  CircularProgressIndicator(),
+                ]
+              : [
+                  Stack(
+                    children: [
+                      Image.network(
+                        profileBanner,
+                      ),
+                      Center(
+                        child: Padding(
+                          padding: const EdgeInsets.only(
+                            top: 35.0,
+                          ),
+                          child: Image.network(
+                            profilePicture,
+                            width: 160,
+                            height: 160,
+                          ),
                         ),
-                        // Image.network(
-                        //   profileBanner,
-                        //   // height: 384,
-                        //   // width: 1280,
-                        // ),
-                        // Image.network(
-                        //   profilePicture,
-                        //   width: 130,
-                        //   height: 130,
-                        // ),
+                        // margin: const EdgeInsets.only(top: 10.0),
+                      ),
+                    ],
+                  ),
+                  // Image.network(
+                  //   profileBanner,
+                  //   // height: 384,
+                  //   // width: 1280,
+                  // ),
+                  // Image.network(
+                  //   profilePicture,
+                  //   width: 130,
+                  //   height: 130,
+                  // ),
+                  Text(
+                    profileName,
+                    style: TextStyle(
+                      fontSize: 30,
+                      color: Colors.white,
+                    ),
+                  ),
+                  Center(
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
                         Text(
-                          profileName + '\n',
-                          style: TextStyle(fontSize: 30, color: Colors.white),
-                        ),
-                        Center(
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Text(
-                                karmaNumber + " karma · ",
-                                style: TextStyle(
-                                    fontSize: 18, color: Colors.white),
-                              ),
-                              Text(
-                                timeInDaySinceCreation + " j · ",
-                                style: TextStyle(
-                                    fontSize: 18, color: Colors.white),
-                              ),
-                              Text(
-                                dateOfCreation + " · ",
-                                style: TextStyle(
-                                    fontSize: 18, color: Colors.white),
-                              ),
-                              Text(
-                                subsNumber + " abonné(e)",
-                                style: TextStyle(
-                                    fontSize: 18, color: Colors.white),
-                              ),
-                            ],
+                          karmaNumber + " karma · ",
+                          style: TextStyle(
+                            fontSize: 18,
+                            color: Colors.white,
                           ),
                         ),
                         Text(
-                          profileDescription,
-                          style: TextStyle(fontSize: 15, color: Colors.white),
+                          timeInDaySinceCreation + " j · ",
+                          style: TextStyle(
+                            fontSize: 18,
+                            color: Colors.white,
+                          ),
                         ),
-                        // ElevatedButton(
-                        //   child: Text('Logout'),
-                        //   onPressed: () async {
-                        //     final prefs = await SharedPreferences.getInstance();
-                        //     prefs.remove('access_token');
-                        //     Navigator.of(context).pushAndRemoveUntil(
-                        //         MaterialPageRoute(
-                        //             builder: (BuildContext context) =>
-                        //                 LoginPage()),
-                        //         (Route<dynamic> route) => false);
-                        //   },
-                        // ),
-                      ])));
+                        Text(
+                          dateOfCreation + " · ",
+                          style: TextStyle(
+                            fontSize: 18,
+                            color: Colors.white,
+                          ),
+                        ),
+                        Text(
+                          subsNumber + " abonné(e)",
+                          style: TextStyle(
+                            fontSize: 18,
+                            color: Colors.white,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Text(
+                    profileDescription + '\n',
+                    style: TextStyle(
+                      fontSize: 15,
+                      color: Colors.white,
+                    ),
+                  ),
+                  Container(
+                    height: MediaQuery.of(context).size.height * 0.46,
+                    color: Colors.black,
+                    child: DefaultTabController(
+                      length: 3,
+                      child: Scaffold(
+                        appBar: AppBar(
+                          backgroundColor: Colors.black,
+                          toolbarHeight:
+                              MediaQuery.of(context).size.height * 0.05,
+                          automaticallyImplyLeading: false,
+                          flexibleSpace: Column(
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            children: [
+                              TabBar(
+                                indicatorWeight: 3,
+                                tabs: [
+                                  Text(
+                                    "Posts",
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 15,
+                                    ),
+                                  ),
+                                  Text(
+                                    "Comments",
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 15,
+                                    ),
+                                  ),
+                                  Text(
+                                    "About",
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 15,
+                                    ),
+                                  ),
+                                ],
+                              )
+                            ],
+                          ),
+                        ),
+                        body: TabBarView(
+                          children: <Widget>[
+                            Icon(
+                              Icons.flight,
+                              size: 50,
+                            ),
+                            Icon(
+                              Icons.directions_transit,
+                              size: 50,
+                            ),
+                            Icon(
+                              Icons.directions_car,
+                              size: 50,
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                  // DefaultTabController(
+                  //   length: 3,
+                  //   child: Scaffold(
+                  //     appBar: AppBar(
+                  //       flexibleSpace: Column(
+                  //         children: [
+                  //           Text(
+                  //             "1",
+                  //             style: TextStyle(
+                  //               fontSize: 18,
+                  //               color: Colors.white,
+                  //             ),
+                  //           ),
+                  //           Text(
+                  //             "2",
+                  //             style: TextStyle(
+                  //               fontSize: 18,
+                  //               color: Colors.white,
+                  //             ),
+                  //           ),
+                  //           Text(
+                  //             "3",
+                  //             style: TextStyle(
+                  //               fontSize: 18,
+                  //               color: Colors.white,
+                  //             ),
+                  //           ),
+                  //         ],
+                  //       ),
+                  //     ),
+                  //   ),
+                  // ),
+                  // ElevatedButton(
+                  //   child: Text('Logout'),
+                  //   onPressed: () async {
+                  //     final prefs = await SharedPreferences.getInstance();
+                  //     prefs.remove('access_token');
+                  //     Navigator.of(context).pushAndRemoveUntil(
+                  //         MaterialPageRoute(
+                  //             builder: (BuildContext context) =>
+                  //                 LoginPage()),
+                  //         (Route<dynamic> route) => false);
+                  //   },
+                  // ),
+                ],
+        ),
+      ),
+    );
   }
 }
