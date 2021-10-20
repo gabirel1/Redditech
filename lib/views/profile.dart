@@ -258,18 +258,22 @@ class _ProfilePageState extends State<ProfilePage> {
                             ],
                           ),
                         ),
+                        backgroundColor: Colors.black,
                         body: TabBarView(
                           children: <Widget>[
                             Icon(
                               Icons.flight,
+                              color: Colors.white,
                               size: 50,
                             ),
                             Icon(
                               Icons.directions_transit,
+                              color: Colors.white,
                               size: 50,
                             ),
                             Icon(
                               Icons.directions_car,
+                              color: Colors.white,
                               size: 50,
                             ),
                           ],
