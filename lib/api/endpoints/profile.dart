@@ -76,4 +76,10 @@ class APIProfile {
     var formatted = DateFormat("dd MMMM yyyy").format(createdAtDate);
     return formatted.toString();
   }
+
+  getCommentKarma() {
+    return data["comment_karma"];
+  }
+
+  // get
 }
