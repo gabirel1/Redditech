@@ -6,12 +6,17 @@ import 'package:redditech/api/utils.dart';
 
 class APIProfile {
   var data;
+  var comments;
 
   APIProfile();
 
   fetch() async {
     var response = await getAPI("me");
     data = jsonDecode(response.body);
+    print("user/" + data["name"] + "/comments");
+    var response2 = await getAPI("user/" + data["name"] + "/comments");
+    comments = jsonDecode(response2.body);
+    print(comments);
   }
 
   getDisplayName() {
@@ -79,6 +84,16 @@ class APIProfile {
 
   getCommentKarma() {
     return data["comment_karma"];
+  }
+
+  getComments() {
+    List arr = [];
+    // print(comments["data"]["dist"]);
+    // for (int i = 0; i < comments["data"]["dist"]; i++) {
+    //   arr.add(comments["data"]["children"][i]);
+    //   print(comments["data"]["children"][i]["body"]);
+    // }
+    return arr;
   }
 
   // get

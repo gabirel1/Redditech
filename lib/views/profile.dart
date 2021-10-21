@@ -33,6 +33,7 @@ class _ProfilePageState extends State<ProfilePage> {
   String subsNumber = "";
   String timeInDaySinceCreation = "";
   String dateOfCreation = "";
+  List commentsList = [];
 
   @override
   void initState() {
@@ -52,6 +53,7 @@ class _ProfilePageState extends State<ProfilePage> {
       subsNumber = apiProfile.getSubs().toString();
       timeInDaySinceCreation = apiProfile.getTimeSinceCreation();
       dateOfCreation = apiProfile.getDateOfCreation();
+      commentsList = apiProfile.getComments();
       isLoading = false;
     });
   }
