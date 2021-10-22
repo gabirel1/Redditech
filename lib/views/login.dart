@@ -95,7 +95,7 @@ class _LoginPageState extends State<LoginPage> {
           // Here we take the value from the MyHomePage object that was created by
           // the App.build method, and use it to set our appbar title.
           title: Text(widget.title),
-          backgroundColor: Colors.deepOrange,
+          backgroundColor: Color(0xff202020),
         ),
         body: Center(
           child: isLoading

@@ -15,8 +15,16 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Redditech',
-      theme:
-          ThemeData(primarySwatch: Colors.blue, scaffoldBackgroundColor: Colors.black, backgroundColor: Colors.black),
+      theme: ThemeData(
+          primarySwatch: Colors.blue,
+          scaffoldBackgroundColor: Colors.black,
+          backgroundColor: Colors.black,
+          textTheme: TextTheme(
+            bodyText1: TextStyle(),
+            bodyText2: TextStyle(),
+          ).apply(
+            bodyColor: Colors.white,
+          )),
       home: LoginPage(),
     );
   }
@@ -89,11 +97,13 @@ class _MainPageState extends State<MainPage> {
                 MaterialPageRoute(builder: (context) => ProfilePage()),
               );
             },
-            child: isLoading ? Text("") : Image.network(
-              profilePicture,
-              height: 30,
-              width: 30,
-            ),
+            child: isLoading
+                ? Text("")
+                : Image.network(
+                    profilePicture,
+                    height: 30,
+                    width: 30,
+                  ),
           ),
         ],
       ),
