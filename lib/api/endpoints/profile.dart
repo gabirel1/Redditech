@@ -11,11 +11,17 @@ class APIProfile {
 
   fetch() async {
     var response = await getAPI("me");
-    data = jsonDecode(response.body);
+    try {
+      data = jsonDecode(response.body);
+    } catch (_) {
+      data = [];
+      return false;
+    }
     print("user/" + data["name"] + "/comments");
     var response2 = await getAPI("user/" + data["name"] + "/comments");
     comments = jsonDecode(response2.body);
     print(comments);
+    return true;
   }
 
   getDisplayName() {

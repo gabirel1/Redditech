@@ -44,7 +44,7 @@ class _LoginPageState extends State<LoginPage> {
       print("User already logged in!");
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (context) => MyHomePage(title: "Redditech")),
+        MaterialPageRoute(builder: (context) => MainPage(title: "Redditech")),
       );
     } else {
       setState(() {
@@ -55,8 +55,8 @@ class _LoginPageState extends State<LoginPage> {
 
   void login() async {
     FlutterWebBrowser.openWebPage(
-        url:
-            Uri.encodeFull("$redditAPIBaseURL/authorize?client_id=$redditClientID&response_type=token&scope=$redditScope&state=$redditState&redirect_uri=$redirectUri"));
+        url: Uri.encodeFull(
+            "$redditAPIBaseURL/authorize?client_id=$redditClientID&response_type=token&scope=$redditScope&state=$redditState&redirect_uri=$redirectUri"));
   }
 
   late StreamSubscription _sub;
@@ -74,8 +74,7 @@ class _LoginPageState extends State<LoginPage> {
         print("User logged in!");
         Navigator.pushReplacement(
           context,
-          MaterialPageRoute(
-              builder: (context) => MyHomePage(title: "Redditech")),
+          MaterialPageRoute(builder: (context) => MainPage(title: "Redditech")),
         );
       }
     }, onError: (err) {

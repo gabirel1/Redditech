@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:redditech/api/endpoints/profile.dart';
+import 'package:redditech/views/home.dart';
 import 'package:redditech/views/login.dart';
 import 'package:redditech/views/profile.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 void main() {
   runApp(MyApp());
@@ -13,45 +15,31 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Redditech',
-      theme: ThemeData(
-        // This is the theme of your application.
-        //
-        // Try running your application with "flutter run". You'll see the
-        // application has a blue toolbar. Then, without quitting the app, try
-        // changing the primarySwatch below to Colors.green and then invoke
-        // "hot reload" (press "r" in the console where you ran "flutter run",
-        // or simply save your changes to "hot reload" in a Flutter IDE).
-        // Notice that the counter didn't reset back to zero; the application
-        // is not restarted.
-        primarySwatch: Colors.blue,
-      ),
+      theme:
+          ThemeData(primarySwatch: Colors.blue, scaffoldBackgroundColor: Colors.black, backgroundColor: Colors.black)
       home: LoginPage(),
     );
   }
 }
 
-class MyHomePage extends StatefulWidget {
-  MyHomePage({Key? key, required this.title}) : super(key: key);
-
-  // This widget is the home page of your application. It is stateful, meaning
-  // that it has a State object (defined below) that contains fields that affect
-  // how it looks.
-
-  // This class is the configuration for the state. It holds the values (in this
-  // case the title) provided by the parent (in this case the App widget) and
-  // used by the build method of the State. Fields in a Widget subclass are
-  // always marked "final".
+class MainPage extends StatefulWidget {
+  MainPage({Key? key, required this.title}) : super(key: key);
 
   final String title;
 
   @override
-  _MyHomePageState createState() => _MyHomePageState();
+  _MainPageState createState() => _MainPageState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
+class _MainPageState extends State<MainPage> {
   bool isLoading = true;
   String profileName = "";
   String profilePicture = "";
+
+  int _selectedIndex = 0;
+  static List<StatefulWidget> _widgetOptions = <StatefulWidget>[
+    HomePage(),
+  ];
 
   @override
   void initState() {
@@ -61,7 +49,13 @@ class _MyHomePageState extends State<MyHomePage> {
 
   void loadData() async {
     APIProfile apiProfile = APIProfile();
-    await apiProfile.fetch();
+    if (!await apiProfile.fetch()) {
+      final prefs = await SharedPreferences.getInstance();
+      prefs.remove('access_token');
+      Navigator.of(context).pushAndRemoveUntil(
+          MaterialPageRoute(builder: (BuildContext context) => LoginPage()),
+          (Route<dynamic> route) => false);
+    }
     setState(() {
       profileName = apiProfile.getDisplayName();
       profilePicture = apiProfile.getProfilePicture();
@@ -69,11 +63,17 @@ class _MyHomePageState extends State<MyHomePage> {
     });
   }
 
+  void _onItemTapped(int index) {
+    setState(() {
+      _selectedIndex = index;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        // Here we take the value from the MyHomePage object that was created by
+        // Here we take the value from the MainPage object that was created by
         // the App.build method, and use it to set our appbar title.
         title: Text(
           widget.title,
@@ -114,10 +114,34 @@ class _MyHomePageState extends State<MyHomePage> {
           // axis because Columns are vertical (the cross axis would be
           // horizontal).
           mainAxisAlignment: MainAxisAlignment.center,
-          children:
-              isLoading ? <Widget>[CircularProgressIndicator()] : <Widget>[],
+          children: isLoading
+              ? <Widget>[CircularProgressIndicator()]
+              : <Widget>[
+                  Container(
+                      color: Colors.black,
+                      child: _widgetOptions.elementAt(_selectedIndex))
+                ],
         ),
-      ), // This trailing comma makes auto-formatting nicer for build methods.
+      ),
+      bottomNavigationBar: BottomNavigationBar(
+        items: const <BottomNavigationBarItem>[
+          BottomNavigationBarItem(
+            icon: Icon(Icons.home),
+            label: 'Home',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.business),
+            label: 'Business',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.people),
+            label: 'School',
+          ),
+        ],
+        currentIndex: _selectedIndex,
+        selectedItemColor: Colors.amber[800],
+        onTap: _onItemTapped,
+      ),
     );
   }
 }
