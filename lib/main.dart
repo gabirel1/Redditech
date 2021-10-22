@@ -80,7 +80,7 @@ class _MainPageState extends State<MainPage> {
         title: Text(
           widget.title,
         ),
-        backgroundColor: Colors.deepOrange,
+        backgroundColor: Color(0xff202020),
         actions: <Widget>[
           InkWell(
             onTap: () {
@@ -89,7 +89,7 @@ class _MainPageState extends State<MainPage> {
                 MaterialPageRoute(builder: (context) => ProfilePage()),
               );
             },
-            child: Image.network(
+            child: isLoading ? Text("") : Image.network(
               profilePicture,
               height: 30,
               width: 30,
@@ -126,6 +126,7 @@ class _MainPageState extends State<MainPage> {
         ),
       ),
       bottomNavigationBar: BottomNavigationBar(
+        backgroundColor: Color(0xff202020),
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(
             icon: Icon(Icons.home),
@@ -141,7 +142,8 @@ class _MainPageState extends State<MainPage> {
           ),
         ],
         currentIndex: _selectedIndex,
-        selectedItemColor: Colors.amber[800],
+        selectedItemColor: Colors.white,
+        unselectedItemColor: Colors.grey,
         onTap: _onItemTapped,
       ),
     );

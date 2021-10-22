@@ -10,22 +10,20 @@ class APIProfile {
   APIProfile();
 
   fetch() async {
-    var response = await getAPI("me");
+    var response = await getAPI("me", v1: true);
+    print(response);
     try {
       data = jsonDecode(response.body);
+      var response2 = await getAPI("user/" + data["name"] + "/comments");
+      comments = jsonDecode(response2.body);
     } catch (_) {
       data = [];
       return false;
     }
-    print("user/" + data["name"] + "/comments");
-    var response2 = await getAPI("user/" + data["name"] + "/comments");
-    comments = jsonDecode(response2.body);
-    print(comments);
     return true;
   }
 
   getDisplayName() {
-    print(data);
     return data["subreddit"]["display_name"];
   }
 
