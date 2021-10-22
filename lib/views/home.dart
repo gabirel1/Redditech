@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:redditech/api/endpoints/subreddits.dart';
+import 'package:redditech/widgets/subreddit_post.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -8,7 +9,9 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   var isLoading = true;
-  var subs = [];
+  var subsBest = [];
+  var subsHot = [];
+  var subsTop = [];
 
   @override
   void initState() {
@@ -21,9 +24,10 @@ class _HomePageState extends State<HomePage> {
     await apiSubreddits.fetch();
     setState(() {
       isLoading = false;
-      subs = apiSubreddits.getPopularSubs();
+      subsBest = apiSubreddits.getBestSubs();
+      subsHot = apiSubreddits.getHotSubs();
+      subsTop = apiSubreddits.getTopSubs();
     });
-    print(subs.length);
   }
 
   @override
@@ -32,13 +36,13 @@ class _HomePageState extends State<HomePage> {
       return CircularProgressIndicator();
     }
     return Container(
-      height: MediaQuery.of(context).size.height * 0.5,
+      height: MediaQuery.of(context).size.height * 0.79,
       child: DefaultTabController(
         length: 3,
         child: Scaffold(
           appBar: AppBar(
             backgroundColor: Colors.black,
-            toolbarHeight: MediaQuery.of(context).size.height * 0.05,
+            toolbarHeight: MediaQuery.of(context).size.height * 0.13,
             automaticallyImplyLeading: false,
             flexibleSpace: Column(
               mainAxisAlignment: MainAxisAlignment.end,
@@ -47,21 +51,21 @@ class _HomePageState extends State<HomePage> {
                   indicatorWeight: 3,
                   tabs: [
                     Text(
-                      "Posts",
+                      "Bests",
                       style: TextStyle(
                         color: Colors.white,
                         fontSize: 15,
                       ),
                     ),
                     Text(
-                      "Comments",
+                      "Hots",
                       style: TextStyle(
                         color: Colors.white,
                         fontSize: 15,
                       ),
                     ),
                     Text(
-                      "About",
+                      "Tops",
                       style: TextStyle(
                         color: Colors.white,
                         fontSize: 15,
@@ -75,23 +79,34 @@ class _HomePageState extends State<HomePage> {
           backgroundColor: Colors.black,
           body: TabBarView(
             children: <Widget>[
-              Container(
-                  child: CustomScrollView(slivers: <Widget>[
-                SliverList(
+              CustomScrollView(
+                slivers: <Widget>[
+                  SliverList(
+                      delegate: SliverChildBuilderDelegate(
+                          (BuildContext context, int index) {
+                    return SubRedditPost(data: subsBest[index]["data"]);
+                  }, childCount: subsBest.length))
+                ],
+              ),
+              CustomScrollView(
+                slivers: <Widget>[
+                  SliverList(
                     delegate: SliverChildBuilderDelegate(
                         (BuildContext context, int index) {
-                  return Text("yo");
-                }, childCount: subs.length))
-              ])),
-              Icon(
-                Icons.directions_transit,
-                color: Colors.white,
-                size: 50,
+                      return SubRedditPost(data: subsHot[index]["data"]);
+                    }, childCount: subsHot.length),
+                  )
+                ],
               ),
-              Icon(
-                Icons.directions_car,
-                color: Colors.white,
-                size: 50,
+              CustomScrollView(
+                slivers: <Widget>[
+                  SliverList(
+                    delegate: SliverChildBuilderDelegate(
+                        (BuildContext context, int index) {
+                      return SubRedditPost(data: subsTop[index]["data"]);
+                    }, childCount: subsTop.length),
+                  ),
+                ],
               ),
             ],
           ),
