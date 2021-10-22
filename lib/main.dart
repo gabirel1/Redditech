@@ -39,6 +39,8 @@ class _MainPageState extends State<MainPage> {
   int _selectedIndex = 0;
   static List<StatefulWidget> _widgetOptions = <StatefulWidget>[
     HomePage(),
+    HomePage(),
+    HomePage(),
   ];
 
   @override
