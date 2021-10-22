@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:redditech/utils/convert.dart';
 
 class SubRedditPost extends StatelessWidget {
   final data;
@@ -8,26 +9,54 @@ class SubRedditPost extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.all(10.0),
+      color: Color(0xff202020),
+      padding: EdgeInsets.only(top: 15.0),
+      margin: const EdgeInsets.only(bottom: 10.0),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          Text(
-            data["title"],
-            style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold),
+          Container(
+            padding: EdgeInsets.only(left: 15.0, right: 15, bottom: 10),
+            child: Row(
+              children: [
+                Text(
+                  data["subreddit_name_prefixed"],
+                  style: TextStyle(fontSize: 14.0, fontWeight: FontWeight.bold),
+                ),
+                Spacer(),
+                // ElevatedButton(onPressed: () => {}, child: Text("Sub"))
+              ],
+            ),
           ),
-          Text(
-            data["author"],
-            style: TextStyle(fontSize: 14.0, fontWeight: FontWeight.bold),
+          Container(
+            padding: EdgeInsets.only(left: 15.0, right: 15, bottom: 10),
+            child: Text(
+              "u/" +
+                  data["author"] +
+                  " · " +
+                  timestampToString(data["created"]) +
+                  " · " +
+                  data["domain"],
+              style: TextStyle(fontSize: 14.0),
+            ),
           ),
-          Text(
-            data["subreddit_name_prefixed"],
-            style: TextStyle(fontSize: 14.0, fontWeight: FontWeight.bold),
+          Container(
+            padding: EdgeInsets.only(left: 15.0, right: 15, bottom: 10),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                Text(
+                  data["title"],
+                  style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold),
+                ),
+              ],
+            ),
           ),
-          Text(
-            data["created"].toString(),
-            style: TextStyle(fontSize: 14.0, fontWeight: FontWeight.bold),
-          ),
+          if (data["url"].contains(".jpg") || data["url"].contains(".png"))
+            Image.network(
+              data["url"],
+              fit: BoxFit.cover,
+            ),
         ],
       ),
     );

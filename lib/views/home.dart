@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:material_floating_search_bar/material_floating_search_bar.dart';
 import 'package:redditech/api/endpoints/subreddits.dart';
 import 'package:redditech/widgets/subreddit_post.dart';
 
