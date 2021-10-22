@@ -73,56 +73,56 @@ class _ProfilePageState extends State<ProfilePage> {
                     print("tab");
                   },
                   child: Container(
-                    child: Center(
-                      child: Column(
-                        children: [
-                          Text(
-                            commentsList[index]["link_title"],
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 18,
+                    padding: EdgeInsets.all(10.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          commentsList[index]["link_title"],
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 18,
+                          ),
+                        ),
+                        Row(
+                          children: [
+                            Text(
+                              commentsList[index]["author"] + " · ",
+                              style: TextStyle(
+                                color: Colors.grey,
+                                fontSize: 15,
+                              ),
                             ),
-                          ),
-                          Row(
-                            children: [
-                              Text(
-                                commentsList[index]["author"] + " · ",
-                                style: TextStyle(
-                                  color: Colors.grey,
-                                  fontSize: 15,
-                                ),
+                            Text(
+                              timestampToString(
+                                      commentsList[index]["created"]) +
+                                  " · ",
+                              style: TextStyle(
+                                color: Colors.grey,
+                                fontSize: 15,
                               ),
-                              Text(
-                                timestampToString(
-                                        commentsList[index]["created"]) +
-                                    " · ",
-                                style: TextStyle(
-                                  color: Colors.grey,
-                                  fontSize: 15,
-                                ),
-                              ),
-                              Text(
-                                commentsList[index]["score"].toString(),
-                                style: TextStyle(
-                                  color: Colors.grey,
-                                  fontSize: 15,
-                                ),
-                              ),
-                              Icon(
-                                Icons.arrow_upward,
-                                color: Colors.orange,
-                              ),
-                            ],
-                          ),
-                          Text(
-                            commentsList[index]["body"],
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 18,
                             ),
+                            Text(
+                              commentsList[index]["score"].toString() + " ",
+                              style: TextStyle(
+                                color: Colors.grey,
+                                fontSize: 15,
+                              ),
+                            ),
+                            Icon(
+                              Icons.arrow_upward,
+                              color: Colors.orange,
+                            ),
+                          ],
+                        ),
+                        Text(
+                          commentsList[index]["body"],
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 18,
                           ),
-                        ],
-                      ),
+                        ),
+                      ],
                     ),
                   ),
                 );
