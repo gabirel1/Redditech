@@ -2,7 +2,7 @@ import 'package:http/http.dart' as http;
 import 'package:redditech/utils/secrets.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-Future<http.Response> getAPI(endPoint, v1) async {
+Future<http.Response> getAPI(endPoint, {v1 = false}) async {
   final prefs = await SharedPreferences.getInstance();
   var accessToken = prefs.getString('access_token');
   var url = v1 ? redditAPIOAuthBaseURL : redditAPIOAuthBaseURL_V2;
@@ -12,7 +12,7 @@ Future<http.Response> getAPI(endPoint, v1) async {
   });
 }
 
-Future<http.Response> postAPI(endPoint, body, v1) async {
+Future<http.Response> postAPI(endPoint, body, {v1 = false}) async {
   final prefs = await SharedPreferences.getInstance();
   var accessToken = prefs.getString('access_token');
   var url = v1 ? redditAPIOAuthBaseURL : redditAPIOAuthBaseURL_V2;
@@ -24,7 +24,7 @@ Future<http.Response> postAPI(endPoint, body, v1) async {
       body: body);
 }
 
-Future<http.Response> patchAPI(endPoint, body, v1) async {
+Future<http.Response> patchAPI(endPoint, body, {v1 = false}) async {
   final prefs = await SharedPreferences.getInstance();
   var accessToken = prefs.getString('access_token');
   var url = v1 ? redditAPIOAuthBaseURL : redditAPIOAuthBaseURL_V2;
@@ -36,7 +36,7 @@ Future<http.Response> patchAPI(endPoint, body, v1) async {
       body: body);
 }
 
-Future<http.Response> putAPI(endPoint, body, v1) async {
+Future<http.Response> putAPI(endPoint, body, {v1 = false}) async {
   final prefs = await SharedPreferences.getInstance();
   var accessToken = prefs.getString('access_token');
   var url = v1 ? redditAPIOAuthBaseURL : redditAPIOAuthBaseURL_V2;
@@ -48,7 +48,7 @@ Future<http.Response> putAPI(endPoint, body, v1) async {
       body: body);
 }
 
-Future<http.Response> deleteAPI(endPoint, body, v1) async {
+Future<http.Response> deleteAPI(endPoint, body, {v1 = false}) async {
   final prefs = await SharedPreferences.getInstance();
   var accessToken = prefs.getString('access_token');
   var url = v1 ? redditAPIOAuthBaseURL : redditAPIOAuthBaseURL_V2;
