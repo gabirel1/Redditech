@@ -1,12 +1,7 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:redditech/api/endpoints/profile.dart';
-import 'package:redditech/utils/secrets.dart';
 import 'package:redditech/views/login.dart';
 import 'package:redditech/views/profile.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'package:http/http.dart' as http;
 
 void main() {
   runApp(MyApp());

@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:ffi';
 import 'package:intl/intl.dart';
 
 import 'package:redditech/api/utils.dart';
