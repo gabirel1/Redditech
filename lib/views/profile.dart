@@ -18,7 +18,7 @@ class ProfilePage extends StatefulWidget {
   // used by the build method of the State. Fields in a Widget subclass are
   // always marked "final".
 
-  final String title = "Mon Profile";
+  final String title = "Profil";
 
   @override
   _ProfilePageState createState() => _ProfilePageState();
@@ -63,7 +63,7 @@ class _ProfilePageState extends State<ProfilePage> {
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.title),
-        backgroundColor: Colors.deepOrange,
+        backgroundColor: Color(0xff202020),
         actions: [
           PopupMenuButton(
             itemBuilder: (context) => [
