@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:redditech/api/endpoints/profile.dart';
+import 'package:redditech/utils/convert.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'login.dart';
@@ -44,18 +45,94 @@ class _ProfilePageState extends State<ProfilePage> {
   void loadData() async {
     APIProfile apiProfile = APIProfile();
     await apiProfile.fetch();
-    setState(() {
-      profileName = apiProfile.getDisplayName();
-      profilePicture = apiProfile.getProfilePicture();
-      profileBanner = apiProfile.getBannerPicture();
-      profileDescription = apiProfile.getDescription();
-      karmaNumber = apiProfile.getKarma().toString();
-      subsNumber = apiProfile.getSubs().toString();
-      timeInDaySinceCreation = apiProfile.getTimeSinceCreation();
-      dateOfCreation = apiProfile.getDateOfCreation();
-      commentsList = apiProfile.getComments();
-      isLoading = false;
-    });
+    setState(
+      () {
+        profileName = apiProfile.getDisplayName();
+        profilePicture = apiProfile.getProfilePicture();
+        profileBanner = apiProfile.getBannerPicture();
+        profileDescription = apiProfile.getDescription();
+        karmaNumber = apiProfile.getKarma().toString();
+        subsNumber = apiProfile.getSubs().toString();
+        timeInDaySinceCreation = apiProfile.getTimeSinceCreation();
+        dateOfCreation = apiProfile.getDateOfCreation();
+        commentsList = apiProfile.getComments();
+        isLoading = false;
+      },
+    );
+  }
+
+  Widget comment() {
+    return Container(
+      child: CustomScrollView(
+        slivers: <Widget>[
+          SliverList(
+            delegate: SliverChildBuilderDelegate(
+              (BuildContext context, int index) {
+                return InkWell(
+                  onTap: () {
+                    print("tab");
+                  },
+                  child: Container(
+                    child: Center(
+                      child: Column(
+                        children: [
+                          Text(
+                            commentsList[index]["link_title"],
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 18,
+                            ),
+                          ),
+                          Row(
+                            children: [
+                              Text(
+                                commentsList[index]["author"] + " · ",
+                                style: TextStyle(
+                                  color: Colors.grey,
+                                  fontSize: 15,
+                                ),
+                              ),
+                              Text(
+                                timestampToString(
+                                        commentsList[index]["created"]) +
+                                    " · ",
+                                style: TextStyle(
+                                  color: Colors.grey,
+                                  fontSize: 15,
+                                ),
+                              ),
+                              Text(
+                                commentsList[index]["score"].toString(),
+                                style: TextStyle(
+                                  color: Colors.grey,
+                                  fontSize: 15,
+                                ),
+                              ),
+                              Icon(
+                                Icons.arrow_upward,
+                                color: Colors.orange,
+                              ),
+                            ],
+                          ),
+                          Text(
+                            commentsList[index]["body"],
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 18,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                );
+              },
+              childCount: commentsList.length,
+            ),
+          ),
+        ],
+      ),
+    );
   }
 
   @override
@@ -96,38 +173,17 @@ class _ProfilePageState extends State<ProfilePage> {
                 final prefs = await SharedPreferences.getInstance();
                 prefs.remove('access_token');
                 Navigator.of(context).pushAndRemoveUntil(
-                    MaterialPageRoute(
-                        builder: (BuildContext context) => LoginPage()),
-                    (Route<dynamic> route) => false);
+                  MaterialPageRoute(
+                    builder: (BuildContext context) => LoginPage(),
+                  ),
+                  (Route<dynamic> route) => false,
+                );
               } else {
                 print("cancelled ?");
               }
             },
           ),
         ],
-/*         actions: <Widget>[
-          InkWell(
-            onTap: () async {
-              final prefs = await SharedPreferences.getInstance();
-              prefs.remove('access_token');
-              Navigator.of(context).pushAndRemoveUntil(
-                  MaterialPageRoute(
-                      builder: (BuildContext context) => LoginPage()),
-                  (Route<dynamic> route) => false);
-            },
-            child: Icon(
-              Icons.logout,
-            ),
-            // child: IconButton(
-            //   icon: const Icon(Icons.logout),
-            // ),
-            // child: Image.network(
-            //   profilePicture,
-            //   height: 30,
-            //   width: 30,
-            // ),
-          ),
-        ], */
       ),
       backgroundColor: Colors.black,
       body: Center(
@@ -154,20 +210,9 @@ class _ProfilePageState extends State<ProfilePage> {
                             height: 160,
                           ),
                         ),
-                        // margin: const EdgeInsets.only(top: 10.0),
                       ),
                     ],
                   ),
-                  // Image.network(
-                  //   profileBanner,
-                  //   // height: 384,
-                  //   // width: 1280,
-                  // ),
-                  // Image.network(
-                  //   profilePicture,
-                  //   width: 130,
-                  //   height: 130,
-                  // ),
                   Text(
                     profileName,
                     style: TextStyle(
@@ -187,7 +232,7 @@ class _ProfilePageState extends State<ProfilePage> {
                           ),
                         ),
                         Text(
-                          timeInDaySinceCreation + " j · ",
+                          timeInDaySinceCreation + " d · ",
                           style: TextStyle(
                             fontSize: 18,
                             color: Colors.white,
@@ -201,7 +246,7 @@ class _ProfilePageState extends State<ProfilePage> {
                           ),
                         ),
                         Text(
-                          subsNumber + " abonné(e)",
+                          subsNumber + " followers",
                           style: TextStyle(
                             fontSize: 18,
                             color: Colors.white,
@@ -264,15 +309,11 @@ class _ProfilePageState extends State<ProfilePage> {
                         body: TabBarView(
                           children: <Widget>[
                             Icon(
-                              Icons.flight,
-                              color: Colors.white,
-                              size: 50,
-                            ),
-                            Icon(
                               Icons.directions_transit,
                               color: Colors.white,
                               size: 50,
                             ),
+                            comment(),
                             Icon(
                               Icons.directions_car,
                               color: Colors.white,
@@ -283,50 +324,6 @@ class _ProfilePageState extends State<ProfilePage> {
                       ),
                     ),
                   ),
-                  // DefaultTabController(
-                  //   length: 3,
-                  //   child: Scaffold(
-                  //     appBar: AppBar(
-                  //       flexibleSpace: Column(
-                  //         children: [
-                  //           Text(
-                  //             "1",
-                  //             style: TextStyle(
-                  //               fontSize: 18,
-                  //               color: Colors.white,
-                  //             ),
-                  //           ),
-                  //           Text(
-                  //             "2",
-                  //             style: TextStyle(
-                  //               fontSize: 18,
-                  //               color: Colors.white,
-                  //             ),
-                  //           ),
-                  //           Text(
-                  //             "3",
-                  //             style: TextStyle(
-                  //               fontSize: 18,
-                  //               color: Colors.white,
-                  //             ),
-                  //           ),
-                  //         ],
-                  //       ),
-                  //     ),
-                  //   ),
-                  // ),
-                  // ElevatedButton(
-                  //   child: Text('Logout'),
-                  //   onPressed: () async {
-                  //     final prefs = await SharedPreferences.getInstance();
-                  //     prefs.remove('access_token');
-                  //     Navigator.of(context).pushAndRemoveUntil(
-                  //         MaterialPageRoute(
-                  //             builder: (BuildContext context) =>
-                  //                 LoginPage()),
-                  //         (Route<dynamic> route) => false);
-                  //   },
-                  // ),
                 ],
         ),
       ),

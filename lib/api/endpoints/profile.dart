@@ -16,6 +16,7 @@ class APIProfile {
       data = jsonDecode(response.body);
       var response2 = await getAPI("user/" + data["name"] + "/comments");
       comments = jsonDecode(response2.body);
+      print("$comments");
     } catch (_) {
       data = [];
       return false;
@@ -91,11 +92,12 @@ class APIProfile {
 
   getComments() {
     List arr = [];
-    // print(comments["data"]["dist"]);
-    // for (int i = 0; i < comments["data"]["dist"]; i++) {
-    //   arr.add(comments["data"]["children"][i]);
-    //   print(comments["data"]["children"][i]["body"]);
-    // }
+    print(comments["data"]["dist"]);
+    for (int i = 0; i < comments["data"]["dist"]; i++) {
+      arr.add(comments["data"]["children"][i]["data"]);
+      var body = comments["data"]["children"][i]["data"]["body"];
+      print("body == $body");
+    }
     return arr;
   }
 
