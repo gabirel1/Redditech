@@ -63,6 +63,9 @@ class _ProfilePageState extends State<ProfilePage> {
 
   Widget comment() {
     return Container(
+      padding: EdgeInsets.only(
+        top: 2,
+      ),
       child: CustomScrollView(
         slivers: <Widget>[
           SliverList(
@@ -73,7 +76,15 @@ class _ProfilePageState extends State<ProfilePage> {
                     print("tab");
                   },
                   child: Container(
-                    padding: EdgeInsets.all(10.0),
+                    margin: const EdgeInsets.only(bottom: 2.0),
+                    padding: EdgeInsets.only(
+                      left: 15.0,
+                      right: 15,
+                      bottom: 10,
+                      top: 5,
+                    ),
+                    // padding: EdgeInsets.all(10.0),
+                    color: Color(0xff202020),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
