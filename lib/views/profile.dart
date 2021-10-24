@@ -19,7 +19,7 @@ class ProfilePage extends StatefulWidget {
   // used by the build method of the State. Fields in a Widget subclass are
   // always marked "final".
 
-  final String title = "Profil";
+  final String title = "Profile";
 
   @override
   _ProfilePageState createState() => _ProfilePageState();
@@ -30,10 +30,14 @@ class _ProfilePageState extends State<ProfilePage> {
   String profilePicture = "";
   String profileBanner = "";
   String profileDescription = "";
-  String karmaNumber = "";
   String subsNumber = "";
   String timeInDaySinceCreation = "";
   String dateOfCreation = "";
+  String karmaNumber = "";
+  String karmaPostNumber = "";
+  String karmaCommentNumber = "";
+  String karmaAwarderNumber = "";
+  String karmaAwardeeNumber = "";
   List commentsList = [];
 
   @override
@@ -51,13 +55,316 @@ class _ProfilePageState extends State<ProfilePage> {
         profilePicture = apiProfile.getProfilePicture();
         profileBanner = apiProfile.getBannerPicture();
         profileDescription = apiProfile.getDescription();
-        karmaNumber = apiProfile.getKarma().toString();
         subsNumber = apiProfile.getSubs().toString();
         timeInDaySinceCreation = apiProfile.getTimeSinceCreation();
         dateOfCreation = apiProfile.getDateOfCreation();
+        karmaNumber = apiProfile.getKarma().toString();
+        karmaCommentNumber = apiProfile.getCommentKarma().toString();
+        karmaAwarderNumber = apiProfile.getAwarderKarma().toString();
+        karmaAwardeeNumber = apiProfile.getAwardeeKarma().toString();
+        karmaPostNumber = apiProfile.getPostKarma().toString();
         commentsList = apiProfile.getComments();
         isLoading = false;
       },
+    );
+  }
+
+  Widget about() {
+    return Container(
+      padding: EdgeInsets.only(
+        top: 10.0,
+        left: 10.0,
+        right: 10.0,
+      ),
+      // height: MediaQuery.of(context).size.height * 0.20,
+      // decoration: BoxDecoration(
+      //   // border: Border.all(color: Colors.blueAccent),
+      //   border: Border(
+      //     bottom: BorderSide(
+      //       color: Colors.grey,
+      //       width: 0.2,
+      //     ),
+      //   ),
+      // ),
+      child: Column(
+        children: [
+          Flexible(
+            // flex: 2,
+            child: Container(
+              margin: const EdgeInsets.only(
+                top: 2.0,
+                bottom: 2.0,
+                left: 2.0,
+                right: 2.0,
+              ),
+              decoration: BoxDecoration(
+                // border: Border.all(color: Colors.blueAccent),
+                border: Border(
+                  bottom: BorderSide(
+                    color: Colors.grey,
+                    width: 0.2,
+                  ),
+                ),
+              ),
+              child: Row(
+                children: [
+                  Flexible(
+                    flex: 2,
+                    child: Container(
+                      margin: const EdgeInsets.only(
+                        top: 2.0,
+                        bottom: 2.0,
+                        left: 2.0,
+                        right: 2.0,
+                      ),
+                      // decoration: BoxDecoration(
+                      //   // border: Border.all(color: Colors.blueAccent),
+                      //   border: Border(
+                      //     bottom: BorderSide(
+                      //       color: Colors.grey,
+                      //       width: 0.2,
+                      //     ),
+                      //   ),
+                      // ),
+                      // color: Colors.red,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            karmaPostNumber,
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 16,
+                            ),
+                          ),
+                          Row(
+                            children: [
+                              Text(
+                                "Post Karma",
+                                style: TextStyle(
+                                  color: Colors.grey,
+                                ),
+                              ),
+                            ],
+                          )
+                        ],
+                      ),
+                    ),
+                  ),
+                  Flexible(
+                    flex: 2,
+                    child: Container(
+                      margin: const EdgeInsets.only(
+                        top: 2.0,
+                        bottom: 2.0,
+                        left: 2.0,
+                        right: 2.0,
+                      ),
+                      // decoration: BoxDecoration(
+                      //   // border: Border.all(color: Colors.blueAccent),
+                      //   border: Border(
+                      //     bottom: BorderSide(
+                      //       color: Colors.grey,
+                      //       width: 0.2,
+                      //     ),
+                      //   ),
+                      // ),
+                      // color: Colors.red,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            karmaCommentNumber,
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 16,
+                            ),
+                          ),
+                          Row(
+                            children: [
+                              Text(
+                                "Comment Karma",
+                                style: TextStyle(
+                                  color: Colors.grey,
+                                ),
+                              ),
+                            ],
+                          )
+                        ],
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+          Flexible(
+            // flex: 2,
+            child: Container(
+              margin: const EdgeInsets.only(
+                top: 2.0,
+                bottom: 2.0,
+                left: 2.0,
+                right: 2.0,
+              ),
+              decoration: BoxDecoration(
+                // border: Border.all(color: Colors.blueAccent),
+                border: Border(
+                  bottom: BorderSide(
+                    color: Colors.grey,
+                    width: 0.2,
+                  ),
+                ),
+              ),
+              // color: Colors.brown,
+              child: Row(
+                children: [
+                  Flexible(
+                    flex: 2,
+                    child: Container(
+                      margin: const EdgeInsets.only(
+                        top: 4.0,
+                        bottom: 2.0,
+                        left: 2.0,
+                        right: 2.0,
+                      ),
+                      // color: Colors.red,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            karmaAwarderNumber,
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 16,
+                            ),
+                          ),
+                          Row(
+                            children: [
+                              Text(
+                                "Awarder Karma",
+                                style: TextStyle(
+                                  color: Colors.grey,
+                                ),
+                              ),
+                            ],
+                          )
+                        ],
+                      ),
+                    ),
+                  ),
+                  Flexible(
+                    flex: 2,
+                    child: Container(
+                      margin: const EdgeInsets.only(
+                        top: 4.0,
+                        bottom: 2.0,
+                        left: 2.0,
+                        right: 2.0,
+                      ),
+                      // color: Colors.red,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            karmaAwardeeNumber,
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 16,
+                            ),
+                          ),
+                          Row(
+                            children: [
+                              Text(
+                                "Awardee Karma",
+                                style: TextStyle(
+                                  color: Colors.grey,
+                                ),
+                              ),
+                            ],
+                          )
+                        ],
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+          Flexible(
+            // flex: 2,
+            child: Container(
+              margin: const EdgeInsets.only(
+                top: 12.0,
+                bottom: 2.0,
+                left: 2.0,
+                right: 2.0,
+              ),
+              child: Row(
+                children: [
+                  Text(
+                    profileDescription,
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 16,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+          // Flexible(
+          //   // flex: 3,
+          //   child: Container(
+          //     margin: const EdgeInsets.only(
+          //       top: 2.0,
+          //       bottom: 2.0,
+          //       left: 2.0,
+          //       right: 2.0,
+          //     ),
+          //     color: Colors.grey,
+          //     child: Row(
+          //       children: [
+          //         Column(
+          //           children: [
+          //             Text(
+          //               "Awarder Karma1",
+          //               style: TextStyle(
+          //                 color: Colors.white,
+          //               ),
+          //             ),
+          //           ],
+          //         ),
+          //         // Flexible(
+          //         //   flex: 2,
+          //         //   child: Container(
+          //         //     margin: const EdgeInsets.only(
+          //         //       top: 2.0,
+          //         //       bottom: 2.0,
+          //         //       left: 2.0,
+          //         //       right: 2.0,
+          //         //     ),
+          //         //     color: Colors.red,
+          //         //   ),
+          //         // ),
+          //         Text(
+          //           "Awarder Karm2a",
+          //           style: TextStyle(
+          //             color: Colors.white,
+          //           ),
+          //         ),
+          //         Text(
+          //           "Awarder Karm3",
+          //           style: TextStyle(
+          //             color: Colors.white,
+          //           ),
+          //         ),
+          //       ],
+          //     ),
+          //   ),
+          // ),
+        ],
+      ),
     );
   }
 
@@ -76,14 +383,15 @@ class _ProfilePageState extends State<ProfilePage> {
                     print("tab");
                   },
                   child: Container(
-                    margin: const EdgeInsets.only(bottom: 2.0),
+                    margin: const EdgeInsets.only(
+                      bottom: 2.0,
+                    ),
                     padding: EdgeInsets.only(
                       left: 15.0,
                       right: 15,
                       bottom: 10,
                       top: 5,
                     ),
-                    // padding: EdgeInsets.all(10.0),
                     color: Color(0xff202020),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -274,7 +582,7 @@ class _ProfilePageState extends State<ProfilePage> {
                     ),
                   ),
                   Container(
-                    height: MediaQuery.of(context).size.height * 0.46,
+                    height: MediaQuery.of(context).size.height * 0.48,
                     color: Colors.black,
                     child: DefaultTabController(
                       length: 3,
@@ -325,11 +633,8 @@ class _ProfilePageState extends State<ProfilePage> {
                               size: 50,
                             ),
                             comment(),
-                            Icon(
-                              Icons.directions_car,
-                              color: Colors.white,
-                              size: 50,
-                            ),
+                            about(),
+                            // comment(),
                           ],
                         ),
                       ),

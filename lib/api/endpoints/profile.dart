@@ -16,7 +16,7 @@ class APIProfile {
       data = jsonDecode(response.body);
       var response2 = await getAPI("user/" + data["name"] + "/comments");
       comments = jsonDecode(response2.body);
-      print("$comments");
+      // print("$comments");
     } catch (_) {
       data = [];
       return false;
@@ -45,7 +45,7 @@ class APIProfile {
 
   getBannerPicture() {
     String bannerURL = data["subreddit"]["banner_img"];
-    print("url == $bannerURL");
+    // print("url == $bannerURL");
     return bannerURL.replaceAll("amp;", "");
   }
 
@@ -55,6 +55,23 @@ class APIProfile {
 
   getKarma() {
     return data["total_karma"];
+  }
+
+  getPostKarma() {
+    // might not be the good one but it's the only plausible one atm
+    return data["link_karma"];
+  }
+
+  getCommentKarma() {
+    return data["comment_karma"];
+  }
+
+  getAwarderKarma() {
+    return data["awarder_karma"];
+  }
+
+  getAwardeeKarma() {
+    return data["awardee_karma"];
   }
 
   getSubs() {
@@ -86,20 +103,15 @@ class APIProfile {
     return formatted.toString();
   }
 
-  getCommentKarma() {
-    return data["comment_karma"];
-  }
-
   getComments() {
     List arr = [];
     print(comments["data"]["dist"]);
     for (int i = 0; i < comments["data"]["dist"]; i++) {
       arr.add(comments["data"]["children"][i]["data"]);
-      var body = comments["data"]["children"][i]["data"]["body"];
-      print("body == $body");
+      // var body = comments["data"]["children"][i]["data"]["body"];
+      // print("body == $body");
     }
     return arr;
   }
-
   // get
 }

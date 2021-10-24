@@ -3,7 +3,7 @@ String timestampToString(double timestamp) {
   var difference = now
       .difference(DateTime.fromMillisecondsSinceEpoch(timestamp.toInt() * 1000))
       .inSeconds;
-  print("diff = $difference");
+  // print("diff = $difference");
   if (difference < 60) {
     return 'Now';
   } else if (difference < 3600) {
