@@ -9,7 +9,7 @@ class APISettings {
   APISettings();
 
   fetch() async {
-    var response = await getAPI("prefs", v1: true);
+    var response = await getAPI("me/prefs", v1: true);
     print(response);
     try {
       data = jsonDecode(response.body);
@@ -25,7 +25,7 @@ class APISettings {
   }
 
   getPersonalizeAdsFromPartnersSetting() {
-    return data["third_party_data_personalized_ads"];
+    return data["third_party_site_data_personalized_ads"];
   }
 
   getPersonalizeRecommendationFromLocationSetting() {
@@ -34,5 +34,97 @@ class APISettings {
 
   getCountrySetting() {
     return data["country_code"];
+  }
+
+  getNextGenerationRecommendations() {
+    return data["feed_recommendations_enabled"];
+  }
+
+  getActivityRelevantAds() {
+    return data["activity_relevant_ads"];
+  }
+
+  getPersonalizeRecommendationFromActivityFromPartners() {
+    return data["third_party_data_personalized_ads"];
+  }
+
+  setPersonalizeRecommendationFromActivityFromPartners(bool value) async {
+    try {
+      // ignore: unused_local_variable
+      var response = await patchAPI(
+          "me/prefs",
+          jsonEncode(
+            {
+              "third_party_data_personalized_ads": value,
+            },
+          ),
+          v1: true);
+    } catch (_) {
+      print("error $_");
+    }
+  }
+
+  setPersonalizeAdsFromPartnersSetting(bool value) async {
+    try {
+      // ignore: unused_local_variable
+      var response = await patchAPI(
+          "me/prefs",
+          jsonEncode(
+            {
+              "third_party_site_data_personalized_ads": value,
+            },
+          ),
+          v1: true);
+    } catch (_) {
+      print("error $_");
+    }
+  }
+
+  setPersonalizeRecommendationFromLocationSetting(bool value) async {
+    try {
+      // ignore: unused_local_variable
+      var response = await patchAPI(
+          "me/prefs",
+          jsonEncode(
+            {
+              "show_location_based_recommendations": value,
+            },
+          ),
+          v1: true);
+    } catch (_) {
+      print("error $_");
+    }
+  }
+
+  setNextGenerationRecommendations(bool value) async {
+    try {
+      // ignore: unused_local_variable
+      var response = await patchAPI(
+          "me/prefs",
+          jsonEncode(
+            {
+              "feed_recommendations_enabled": value,
+            },
+          ),
+          v1: true);
+    } catch (_) {
+      print("error $_");
+    }
+  }
+
+  setActivityRelevantAds(bool value) async {
+    try {
+      // ignore: unused_local_variable
+      var response = await patchAPI(
+          "me/prefs",
+          jsonEncode(
+            {
+              "activity_relevant_ads": value,
+            },
+          ),
+          v1: true);
+    } catch (_) {
+      print("error $_");
+    }
   }
 }

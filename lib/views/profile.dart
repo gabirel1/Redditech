@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:redditech/api/endpoints/profile.dart';
 import 'package:redditech/utils/convert.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
-import 'login.dart';
+import 'package:redditech/views/settings.dart';
+import 'package:redditech/views/login.dart';
 
 var isLoading = true;
 
@@ -76,16 +76,6 @@ class _ProfilePageState extends State<ProfilePage> {
         left: 10.0,
         right: 10.0,
       ),
-      // height: MediaQuery.of(context).size.height * 0.20,
-      // decoration: BoxDecoration(
-      //   // border: Border.all(color: Colors.blueAccent),
-      //   border: Border(
-      //     bottom: BorderSide(
-      //       color: Colors.grey,
-      //       width: 0.2,
-      //     ),
-      //   ),
-      // ),
       child: Column(
         children: [
           Flexible(
@@ -117,16 +107,6 @@ class _ProfilePageState extends State<ProfilePage> {
                         left: 2.0,
                         right: 2.0,
                       ),
-                      // decoration: BoxDecoration(
-                      //   // border: Border.all(color: Colors.blueAccent),
-                      //   border: Border(
-                      //     bottom: BorderSide(
-                      //       color: Colors.grey,
-                      //       width: 0.2,
-                      //     ),
-                      //   ),
-                      // ),
-                      // color: Colors.red,
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
@@ -160,16 +140,6 @@ class _ProfilePageState extends State<ProfilePage> {
                         left: 2.0,
                         right: 2.0,
                       ),
-                      // decoration: BoxDecoration(
-                      //   // border: Border.all(color: Colors.blueAccent),
-                      //   border: Border(
-                      //     bottom: BorderSide(
-                      //       color: Colors.grey,
-                      //       width: 0.2,
-                      //     ),
-                      //   ),
-                      // ),
-                      // color: Colors.red,
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
@@ -313,56 +283,6 @@ class _ProfilePageState extends State<ProfilePage> {
               ),
             ),
           ),
-          // Flexible(
-          //   // flex: 3,
-          //   child: Container(
-          //     margin: const EdgeInsets.only(
-          //       top: 2.0,
-          //       bottom: 2.0,
-          //       left: 2.0,
-          //       right: 2.0,
-          //     ),
-          //     color: Colors.grey,
-          //     child: Row(
-          //       children: [
-          //         Column(
-          //           children: [
-          //             Text(
-          //               "Awarder Karma1",
-          //               style: TextStyle(
-          //                 color: Colors.white,
-          //               ),
-          //             ),
-          //           ],
-          //         ),
-          //         // Flexible(
-          //         //   flex: 2,
-          //         //   child: Container(
-          //         //     margin: const EdgeInsets.only(
-          //         //       top: 2.0,
-          //         //       bottom: 2.0,
-          //         //       left: 2.0,
-          //         //       right: 2.0,
-          //         //     ),
-          //         //     color: Colors.red,
-          //         //   ),
-          //         // ),
-          //         Text(
-          //           "Awarder Karm2a",
-          //           style: TextStyle(
-          //             color: Colors.white,
-          //           ),
-          //         ),
-          //         Text(
-          //           "Awarder Karm3",
-          //           style: TextStyle(
-          //             color: Colors.white,
-          //           ),
-          //         ),
-          //       ],
-          //     ),
-          //   ),
-          // ),
         ],
       ),
     );
@@ -488,6 +408,10 @@ class _ProfilePageState extends State<ProfilePage> {
             ],
             onSelected: (String menu) async {
               if (menu == "settings") {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => SettingsPage()),
+                );
               } else if (menu == "logout") {
                 final prefs = await SharedPreferences.getInstance();
                 prefs.remove('access_token');
