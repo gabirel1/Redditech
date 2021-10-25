@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:redditech/utils/convert.dart';
 
@@ -53,9 +54,12 @@ class SubRedditPost extends StatelessWidget {
             ),
           ),
           if (data["url"].contains(".jpg") || data["url"].contains(".png"))
-            Image.network(
-              data["url"],
-              fit: BoxFit.cover,
+            CachedNetworkImage(
+              imageUrl: data["url"],
+              placeholder: (context, url) => (Center(
+                child: Image.network(data["thumbnail"], fit: BoxFit.fill),
+              )),
+              errorWidget: (context, url, error) => Icon(Icons.error),
             ),
         ],
       ),

@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:redditech/api/endpoints/profile.dart';
-import 'package:redditech/views/home.dart';
 import 'package:redditech/views/login.dart';
 import 'package:redditech/views/profile.dart';
+import 'package:redditech/views/search.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
+import 'api/endpoints/subreddits.dart';
+import 'widgets/subreddit_post.dart';
 
 void main() {
   runApp(MyApp());
@@ -43,18 +46,25 @@ class _MainPageState extends State<MainPage> {
   bool isLoading = true;
   String profileName = "";
   String profilePicture = "";
-
-  int _selectedIndex = 0;
-  static List<StatefulWidget> _widgetOptions = <StatefulWidget>[
-    HomePage(),
-    HomePage(),
-    HomePage(),
-  ];
+  var subsBest = [];
+  var subsHot = [];
+  var subsTop = [];
 
   @override
   void initState() {
     super.initState();
     loadData();
+  }
+
+  void loadSubs() async {
+    APISubreddits apiSubreddits = APISubreddits();
+    await apiSubreddits.fetch();
+    setState(() {
+      isLoading = false;
+      subsBest = apiSubreddits.getBestSubs();
+      subsHot = apiSubreddits.getHotSubs();
+      subsTop = apiSubreddits.getTopSubs();
+    });
   }
 
   void loadData() async {
@@ -66,119 +76,133 @@ class _MainPageState extends State<MainPage> {
           MaterialPageRoute(builder: (BuildContext context) => LoginPage()),
           (Route<dynamic> route) => false);
     }
+    loadSubs();
     setState(() {
       profileName = apiProfile.getDisplayName();
       profilePicture = apiProfile.getProfilePicture();
-      isLoading = false;
-    });
-  }
-
-  void _onItemTapped(int index) {
-    setState(() {
-      _selectedIndex = index;
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        // Here we take the value from the MainPage object that was created by
-        // the App.build method, and use it to set our appbar title.
-        title: Container(
-          width: double.infinity,
-          height: 40,
-          color: Colors.white,
-          child: Center(
-            child: TextField(
-              decoration: InputDecoration(
-                  hintText: 'Search', prefixIcon: Icon(Icons.search)),
-              onSubmitted: (String str) {
-                // setState(() {
-                //   searching = true;
-                //   input = str;
-                //   callSearchRequest();
-                // });
-              },
-            ),
-          ),
-        ),
-        backgroundColor: Color(0xff202020),
-        actions: <Widget>[
-          InkWell(
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => ProfilePage()),
-              );
-            },
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                if (isLoading)
-                  Text("")
-                else
-                  Container(
-                    margin: const EdgeInsets.only(right: 16.0),
-                    child: Image.network(
-                      profilePicture,
-                      height: 30,
-                      width: 30,
+    return DefaultTabController(
+      length: 3,
+      child: Scaffold(
+        appBar: AppBar(
+          title: Container(
+            width: double.infinity,
+            height: 40,
+            color: Colors.white,
+            child: Center(
+              child: TextField(
+                decoration: InputDecoration(
+                    hintText: 'Search', prefixIcon: Icon(Icons.search)),
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    PageRouteBuilder(
+                      pageBuilder: (c, a1, a2) => SearchPage(),
+                      transitionsBuilder: (c, anim, a2, child) =>
+                          FadeTransition(opacity: anim, child: child),
+                      transitionDuration: Duration(milliseconds: 250),
                     ),
-                  )
-              ],
+                  );
+                },
+              ),
             ),
           ),
-        ],
-      ),
-      body: Center(
-        // Center is a layout widget. It takes a single child and positions it
-        // in the middle of the parent.
-        child: Column(
-          // Column is also a layout widget. It takes a list of children and
-          // arranges them vertically. By default, it sizes itself to fit its
-          // children horizontally, and tries to be as tall as its parent.
-          //
-          // Invoke "debug painting" (press "p" in the console, choose the
-          // "Toggle Debug Paint" action from the Flutter Inspector in Android
-          // Studio, or the "Toggle Debug Paint" command in Visual Studio Code)
-          // to see the wireframe for each widget.
-          //
-          // Column has various properties to control how it sizes itself and
-          // how it positions its children. Here we use mainAxisAlignment to
-          // center the children vertically; the main axis here is the vertical
-          // axis because Columns are vertical (the cross axis would be
-          // horizontal).
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: isLoading
-              ? <Widget>[CircularProgressIndicator()]
-              : <Widget>[
-                  Container(
-                      color: Colors.black,
-                      child: _widgetOptions.elementAt(_selectedIndex))
+          backgroundColor: Color(0xff202020),
+          actions: <Widget>[
+            InkWell(
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => ProfilePage()),
+                );
+              },
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  if (isLoading)
+                    Text("")
+                  else
+                    Container(
+                      margin: const EdgeInsets.only(right: 16.0),
+                      child: Image.network(
+                        profilePicture,
+                        height: 30,
+                        width: 30,
+                      ),
+                    )
                 ],
+              ),
+            ),
+          ],
+          bottom: TabBar(
+            indicatorWeight: 3,
+            tabs: [
+              Text(
+                "Bests",
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 15,
+                ),
+              ),
+              Text(
+                "Hots",
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 15,
+                ),
+              ),
+              Text(
+                "Tops",
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 15,
+                ),
+              ),
+            ],
+          ),
         ),
-      ),
-      bottomNavigationBar: BottomNavigationBar(
-        backgroundColor: Color(0xff202020),
-        items: const <BottomNavigationBarItem>[
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home),
-            label: 'Home',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.business),
-            label: 'Business',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.people),
-            label: 'School',
-          ),
-        ],
-        currentIndex: _selectedIndex,
-        selectedItemColor: Colors.white,
-        unselectedItemColor: Colors.grey,
-        onTap: _onItemTapped,
+        body: Padding(
+          padding: EdgeInsets.only(top: 8.0),
+          child: isLoading
+              ? Center(child: CircularProgressIndicator())
+              : TabBarView(
+                  children: <Widget>[
+                    CustomScrollView(
+                      slivers: <Widget>[
+                        SliverList(
+                            delegate: SliverChildBuilderDelegate(
+                                (BuildContext context, int index) {
+                          return SubRedditPost(data: subsBest[index]["data"]);
+                        }, childCount: subsBest.length))
+                      ],
+                    ),
+                    CustomScrollView(
+                      slivers: <Widget>[
+                        SliverList(
+                          delegate: SliverChildBuilderDelegate(
+                              (BuildContext context, int index) {
+                            return SubRedditPost(data: subsHot[index]["data"]);
+                          }, childCount: subsHot.length),
+                        )
+                      ],
+                    ),
+                    CustomScrollView(
+                      slivers: <Widget>[
+                        SliverList(
+                          delegate: SliverChildBuilderDelegate(
+                              (BuildContext context, int index) {
+                            return SubRedditPost(data: subsTop[index]["data"]);
+                          }, childCount: subsTop.length),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+        ),
       ),
     );
   }
