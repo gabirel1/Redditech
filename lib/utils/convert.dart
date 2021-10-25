@@ -1,3 +1,7 @@
+import 'dart:convert';
+
+import 'package:flutter/services.dart';
+
 String timestampToString(double timestamp) {
   var now = DateTime.now();
   var difference = now
@@ -13,4 +17,15 @@ String timestampToString(double timestamp) {
   } else {
     return '${difference ~/ 86400}d';
   }
+}
+
+Future<String> getCountryNameFromCountryCode(String countreCode) async {
+  var jsonFile = await rootBundle.loadString('assets/countries.json');
+  var countries = jsonDecode(jsonFile);
+  for (var country in countries) {
+    if (country['code'] == countreCode) {
+      return country['name'];
+    }
+  }
+  return "";
 }
