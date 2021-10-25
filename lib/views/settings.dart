@@ -22,6 +22,8 @@ class _SettingsPageState extends State<SettingsPage> {
   bool activityRelevantAds = false;
   bool personalizeRecommendationFromActivityFromPartners = false;
   List countries = [];
+  String currentSelectedCountryCode = "";
+  String currentSelectedCountryName = "";
 
   @override
   void initState() {
@@ -33,6 +35,8 @@ class _SettingsPageState extends State<SettingsPage> {
     APISettings apiSettings = APISettings();
     await apiSettings.fetch();
     List cntr = await getCountryCodeNameList();
+    var countryCode = apiSettings.getCountryCode();
+    var countryName = await getCountryNameFromCountryCode(countryCode);
 
     setState(() {
       isLoading = false;
@@ -46,6 +50,8 @@ class _SettingsPageState extends State<SettingsPage> {
       personalizeRecommendationFromActivityFromPartners =
           apiSettings.getPersonalizeRecommendationFromActivityFromPartners();
       countries = cntr;
+      currentSelectedCountryCode = countryCode;
+      currentSelectedCountryName = countryName;
     });
   }
 
@@ -312,7 +318,7 @@ class _SettingsPageState extends State<SettingsPage> {
             Row(
               children: [
                 Icon(
-                  Icons.settings_outlined,
+                  Icons.location_on_outlined,
                   color: Colors.grey,
                 ),
                 Container(
@@ -322,30 +328,22 @@ class _SettingsPageState extends State<SettingsPage> {
                   ),
                   width: MediaQuery.of(context).size.width * 0.70,
                   child: Text(
-                    "Personalize recommendations based on your activity with our partners",
+                    "Country",
                     style: TextStyle(
                       color: Colors.white,
                       fontSize: 17,
                     ),
                   ),
                 ),
-                Switch(
-                  value: personalizeRecommendationFromActivityFromPartners,
-                  activeTrackColor: Colors.blueAccent,
-                  activeColor: Colors.white,
-                  inactiveTrackColor: Colors.grey,
-                  onChanged: (value) {
-                    setState(
-                      () {
-                        personalizeRecommendationFromActivityFromPartners =
-                            value;
-                      },
-                    );
-                    APISettings()
-                        .setPersonalizeRecommendationFromActivityFromPartners(
-                            value);
-                    print(value);
-                  },
+                Text(
+                  currentSelectedCountryName,
+                  style: TextStyle(
+                    color: Colors.grey,
+                  ),
+                ),
+                Icon(
+                  Icons.arrow_forward,
+                  color: Colors.white,
                 ),
               ],
             ),
@@ -355,7 +353,7 @@ class _SettingsPageState extends State<SettingsPage> {
               ),
               width: MediaQuery.of(context).size.width * 0.80,
               child: Text(
-                "Allow us to use your interactions with sites and apps we partner with to recommend better posts and communities.",
+                "This is your primary location.",
                 style: TextStyle(
                   color: Colors.grey,
                 ),
