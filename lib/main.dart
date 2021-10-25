@@ -83,6 +83,23 @@ class _MainPageState extends State<MainPage> {
     });
   }
 
+  String lastSearchText = '';
+
+  openSearchPage(String text) {
+    if (text == lastSearchText)
+      return;
+    lastSearchText = text;
+    Navigator.push(
+      context,
+      PageRouteBuilder(
+        pageBuilder: (c, a1, a2) => SearchPage(text: text),
+        transitionsBuilder: (c, anim, a2, child) =>
+            FadeTransition(opacity: anim, child: child),
+        transitionDuration: Duration(milliseconds: 250),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
@@ -98,15 +115,10 @@ class _MainPageState extends State<MainPage> {
                 decoration: InputDecoration(
                     hintText: 'Search', prefixIcon: Icon(Icons.search)),
                 onTap: () {
-                  Navigator.push(
-                    context,
-                    PageRouteBuilder(
-                      pageBuilder: (c, a1, a2) => SearchPage(),
-                      transitionsBuilder: (c, anim, a2, child) =>
-                          FadeTransition(opacity: anim, child: child),
-                      transitionDuration: Duration(milliseconds: 250),
-                    ),
-                  );
+                  openSearchPage('');
+                },
+                onChanged: (text) {
+                  openSearchPage(text);
                 },
               ),
             ),

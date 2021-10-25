@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
 
+var text = '';
+
 class SearchPage extends StatefulWidget {
-  SearchPage({Key? key}) : super(key: key);
+  SearchPage({Key? key, this.text = ''}) : super(key: key);
+
+  final String text;
 
   @override
   _SearchPageState createState() => _SearchPageState();
@@ -25,6 +29,8 @@ class _SearchPageState extends State<SearchPage> {
           color: Colors.white,
           child: Center(
             child: TextField(
+              controller: TextEditingController(text: widget.text),
+              autofocus: true,
               decoration: InputDecoration(
                   hintText: 'Search', prefixIcon: Icon(Icons.search)),
               onSubmitted: (String str) {

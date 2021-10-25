@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:redditech/api/endpoints/profile.dart';
 import 'package:redditech/utils/convert.dart';
@@ -439,18 +440,30 @@ class _ProfilePageState extends State<ProfilePage> {
               : [
                   Stack(
                     children: [
-                      Image.network(
-                        profileBanner,
+                      CachedNetworkImage(
+                        imageUrl: profileBanner,
+                        progressIndicatorBuilder:
+                            (context, url, downloadProgress) => Center(
+                                child: CircularProgressIndicator(
+                                    value: downloadProgress.progress)),
+                        errorWidget: (context, url, error) => Icon(Icons.error),
                       ),
                       Center(
                         child: Padding(
                           padding: const EdgeInsets.only(
                             top: 20.0,
                           ),
-                          child: Image.network(
-                            profilePicture,
-                            width: 160,
+                          child: CachedNetworkImage(
+                            imageUrl: profilePicture,
                             height: 160,
+                            width: 160,
+                            progressIndicatorBuilder:
+                                (context, url, downloadProgress) => Center(
+                              child: CircularProgressIndicator(
+                                  value: downloadProgress.progress),
+                            ),
+                            errorWidget: (context, url, error) =>
+                                Icon(Icons.error),
                           ),
                         ),
                       ),
