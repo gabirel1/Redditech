@@ -37,13 +37,13 @@ class _HomePageState extends State<HomePage> {
       return CircularProgressIndicator();
     }
     return Container(
-      height: MediaQuery.of(context).size.height * 0.79,
+      height: MediaQuery.of(context).size.height * 0.9,
       child: DefaultTabController(
         length: 3,
         child: Scaffold(
           appBar: AppBar(
             backgroundColor: Colors.black,
-            toolbarHeight: MediaQuery.of(context).size.height * 0.13,
+            toolbarHeight: MediaQuery.of(context).size.height * 0.04,
             automaticallyImplyLeading: false,
             flexibleSpace: Column(
               mainAxisAlignment: MainAxisAlignment.end,

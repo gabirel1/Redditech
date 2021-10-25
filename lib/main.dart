@@ -85,8 +85,23 @@ class _MainPageState extends State<MainPage> {
       appBar: AppBar(
         // Here we take the value from the MainPage object that was created by
         // the App.build method, and use it to set our appbar title.
-        title: Text(
-          widget.title,
+        title: Container(
+          width: double.infinity,
+          height: 40,
+          color: Colors.white,
+          child: Center(
+            child: TextField(
+              decoration: InputDecoration(
+                  hintText: 'Search', prefixIcon: Icon(Icons.search)),
+              onSubmitted: (String str) {
+                // setState(() {
+                //   searching = true;
+                //   input = str;
+                //   callSearchRequest();
+                // });
+              },
+            ),
+          ),
         ),
         backgroundColor: Color(0xff202020),
         actions: <Widget>[
@@ -97,13 +112,22 @@ class _MainPageState extends State<MainPage> {
                 MaterialPageRoute(builder: (context) => ProfilePage()),
               );
             },
-            child: isLoading
-                ? Text("")
-                : Image.network(
-                    profilePicture,
-                    height: 30,
-                    width: 30,
-                  ),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                if (isLoading)
+                  Text("")
+                else
+                  Container(
+                    margin: const EdgeInsets.only(right: 16.0),
+                    child: Image.network(
+                      profilePicture,
+                      height: 30,
+                      width: 30,
+                    ),
+                  )
+              ],
+            ),
           ),
         ],
       ),
