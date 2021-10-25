@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:redditech/utils/convert.dart';
+import 'package:redditech/views/subreddit.dart';
 
 class SubRedditPost extends StatelessWidget {
   final data;
@@ -11,18 +12,29 @@ class SubRedditPost extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       color: Color(0xff202020),
-      padding: EdgeInsets.only(top: 15.0),
       margin: const EdgeInsets.only(bottom: 10.0),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           Container(
-            padding: EdgeInsets.only(left: 15.0, right: 15, bottom: 10),
+            padding: EdgeInsets.only(left: 8.0, right: 15),
             child: Row(
               children: [
-                Text(
-                  data["subreddit_name_prefixed"],
-                  style: TextStyle(fontSize: 14.0, fontWeight: FontWeight.bold),
+                TextButton(
+                  child: Text(
+                    data["subreddit_name_prefixed"],
+                    style:
+                        TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold),
+                  ),
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => SubRedditPage(
+                                subreddit: data["subreddit_name_prefixed"],
+                              )),
+                    );
+                  },
                 ),
                 Spacer(),
                 // ElevatedButton(onPressed: () => {}, child: Text("Sub"))
