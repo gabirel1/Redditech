@@ -48,6 +48,26 @@ class APISettings {
     return data["third_party_data_personalized_ads"];
   }
 
+  getCountryCode() {
+    return data["country_code"];
+  }
+
+  setCountryCode(String value) async {
+    try {
+      // ignore: unused_local_variable
+      var response = await patchAPI(
+          "me/prefs",
+          jsonEncode(
+            {
+              "country_code": value,
+            },
+          ),
+          v1: true);
+    } catch (_) {
+      print("error $_");
+    }
+  }
+
   setPersonalizeRecommendationFromActivityFromPartners(bool value) async {
     try {
       // ignore: unused_local_variable

@@ -2,12 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:material_floating_search_bar/material_floating_search_bar.dart';
 import 'package:redditech/api/endpoints/settings.dart';
 import 'package:redditech/api/endpoints/subreddits.dart';
+import 'package:redditech/utils/convert.dart';
 import 'package:redditech/widgets/subreddit_post.dart';
 
 class SettingsPage extends StatefulWidget {
   SettingsPage({Key? key}) : super(key: key);
 
   final String title = "Settings";
+
   @override
   _SettingsPageState createState() => _SettingsPageState();
 }
@@ -19,6 +21,7 @@ class _SettingsPageState extends State<SettingsPage> {
   bool nextGenerationRecommendations = false;
   bool activityRelevantAds = false;
   bool personalizeRecommendationFromActivityFromPartners = false;
+  List countries = [];
 
   @override
   void initState() {
@@ -29,6 +32,8 @@ class _SettingsPageState extends State<SettingsPage> {
   void loadData() async {
     APISettings apiSettings = APISettings();
     await apiSettings.fetch();
+    List cntr = await getCountryCodeNameList();
+
     setState(() {
       isLoading = false;
       personalizeAdsFromPartnersSetting =
@@ -40,6 +45,7 @@ class _SettingsPageState extends State<SettingsPage> {
       activityRelevantAds = apiSettings.getActivityRelevantAds();
       personalizeRecommendationFromActivityFromPartners =
           apiSettings.getPersonalizeRecommendationFromActivityFromPartners();
+      countries = cntr;
     });
   }
 
@@ -371,15 +377,7 @@ class _SettingsPageState extends State<SettingsPage> {
         backgroundColor: Color(0xff202020),
       ),
       body: Center(
-        child: Column(
-          children: isLoading
-              ? [
-                  CircularProgressIndicator(),
-                ]
-              : [
-                  mySettings(),
-                ],
-        ),
+        child: isLoading ? CircularProgressIndicator() : mySettings(),
       ),
     );
   }

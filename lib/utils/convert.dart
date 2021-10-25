@@ -19,8 +19,19 @@ String timestampToString(double timestamp) {
   }
 }
 
+Future<List> getCountryCodeNameList() async {
+  List list = [];
+  var jsonFile = await rootBundle.loadString('./countries.json');
+  var countries = jsonDecode(jsonFile);
+
+  for (var country in countries) {
+    list.add({"name": country['name'], "code": country['code']});
+  }
+  return list;
+}
+
 Future<String> getCountryNameFromCountryCode(String countreCode) async {
-  var jsonFile = await rootBundle.loadString('assets/countries.json');
+  var jsonFile = await rootBundle.loadString('./countries.json');
   var countries = jsonDecode(jsonFile);
   for (var country in countries) {
     if (country['code'] == countreCode) {
