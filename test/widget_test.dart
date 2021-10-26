@@ -12,6 +12,7 @@ import 'package:flutter_test/flutter_test.dart';
 
 import 'package:redditech/main.dart';
 import 'package:redditech/utils/convert.dart';
+import 'package:redditech/utils/secrets.dart';
 
 void main() {
   // testWidgets('Counter increments smoke test', (WidgetTester tester) async {
@@ -56,4 +57,29 @@ void main() {
       expect(res, "2d");
     });
   });
+
+  group("secrets", () {
+    test("secrets1", () {
+      final String scope = redditScope;
+      expect(scope,
+          "identity edit flair history modconfig modflair account modlog modposts modwiki mysubreddits privatemessages read report save submit subscribe vote wikiedit wikiread");
+    });
+
+    test("redditAPIBaseURL", () {
+      final String baseURL = redditAPIBaseURL;
+      expect(baseURL, "https://www.reddit.com/api/v1");
+    });
+
+    test("redditAPIOAuthBaseURL", () {
+      final String baseURL = redditAPIOAuthBaseURL;
+      expect(baseURL, "https://oauth.reddit.com/api/v1");
+    });
+
+    test("redditAPIOAuthBaseURL_V2", () {
+      final String baseURL = redditAPIOAuthBaseURL_V2;
+      expect(baseURL, "https://oauth.reddit.com");
+    });
+  });
+
+  // group("", () {});
 }
