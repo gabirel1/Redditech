@@ -40,3 +40,15 @@ Future<String> getCountryNameFromCountryCode(String countreCode) async {
   }
   return "";
 }
+
+String convertNumberToStringWithSpaces(int number) {
+  String numberString = number.toString();
+  String result = "";
+  for (int i = 0; i < numberString.length; i++) {
+    if (i % 3 == 0 && i != 0) {
+      result = " " + result;
+    }
+    result = numberString[numberString.length - 1 - i] + result;
+  }
+  return result;
+}

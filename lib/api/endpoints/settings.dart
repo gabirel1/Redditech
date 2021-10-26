@@ -10,7 +10,6 @@ class APISettings {
 
   fetch() async {
     var response = await getAPI("me/prefs", v1: true);
-    print(response);
     try {
       data = jsonDecode(response.body);
     } catch (_) {

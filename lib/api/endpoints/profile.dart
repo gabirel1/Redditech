@@ -11,12 +11,10 @@ class APIProfile {
 
   fetch() async {
     var response = await getAPI("me", v1: true);
-    print(response);
     try {
       data = jsonDecode(response.body);
       var response2 = await getAPI("user/" + data["name"] + "/comments");
       comments = jsonDecode(response2.body);
-      // print("$comments");
     } catch (_) {
       data = [];
       return false;

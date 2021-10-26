@@ -74,7 +74,7 @@ void main() {
       final String baseURL = redditAPIOAuthBaseURL;
       expect(baseURL, "https://oauth.reddit.com/api/v1");
     });
-
+  
     test("redditAPIOAuthBaseURL_V2", () {
       final String baseURL = redditAPIOAuthBaseURL_V2;
       expect(baseURL, "https://oauth.reddit.com");
