@@ -36,7 +36,7 @@ void main() {
     expect(res, "Now");
   });
 
-  group("getCountryNameFromCode", () {
+  group("getCountryNameFromCode", () async {
     test("getCountryName", () async {
       String res = await getCountryNameFromCountryCode("FR");
       expect(res, "France");
