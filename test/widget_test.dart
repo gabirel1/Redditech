@@ -30,10 +30,21 @@ void main() {
   //   expect(find.text('0'), findsNothing);
   //   expect(find.text('1'), findsOneWidget);
   // });
-
   test('timeStampToString testing', () {
     String res =
         timestampToString(DateTime.now().millisecondsSinceEpoch / 1000);
     expect(res, "Now");
+  });
+
+  group("getCountryNameFromCode", () {
+    test("getCountryName", () async {
+      String res = await getCountryNameFromCountryCode("FR");
+      expect(res, "France");
+    });
+
+    test("getCountryName2", () async {
+      String res = await getCountryNameFromCountryCode("US");
+      expect(res, "United Kingdom");
+    });
   });
 }
