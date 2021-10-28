@@ -4,7 +4,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:redditech/utils/convert.dart';
 import 'package:redditech/views/subreddit.dart';
-import '/api/endpoints/search.dart';
+import 'package:redditech/api/endpoints/search.dart';
 
 class SearchPage extends StatefulWidget {
   SearchPage({Key? key, this.text = ''}) : super(key: key);
@@ -98,7 +98,9 @@ class _SearchPageState extends State<SearchPage> {
                           margin: EdgeInsets.only(right: 20),
                           child: CachedNetworkImage(
                             width: 36,
-                            imageUrl: searchResults[index]['data']['icon_img'].length > 0
+                            imageUrl: searchResults[index]['data']['icon_img']
+                                        .length >
+                                    0
                                 ? searchResults[index]['data']['icon_img']
                                 : 'https://www.redditstatic.com/icon.png',
                             progressIndicatorBuilder:
