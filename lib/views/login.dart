@@ -1,10 +1,12 @@
 import 'dart:async';
+import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_web_browser/flutter_web_browser.dart';
 import 'package:redditech/main.dart';
 import 'package:redditech/utils/secrets.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:uni_links/uni_links.dart';
+import 'package:http/http.dart' as http;
 
 var isLoading = true;
 
@@ -56,7 +58,7 @@ class _LoginPageState extends State<LoginPage> {
   void login() async {
     FlutterWebBrowser.openWebPage(
         url: Uri.encodeFull(
-            "$redditAPIBaseURL/authorize?client_id=$redditClientID&response_type=token&scope=$redditScope&state=$redditState&redirect_uri=$redirectUri"));
+            "$redditAPIBaseURL/authorize?client_id=$redditClientID&response_type=code&scope=$redditScope&state=$redditState&redirect_uri=$redirectUri"));
   }
 
   late StreamSubscription _sub;
@@ -64,12 +66,22 @@ class _LoginPageState extends State<LoginPage> {
   Future<void> initUniLinks() async {
     _sub = uriLinkStream.listen((Uri? link) async {
       String linkStr = link.toString();
-      if (linkStr.contains('access_token') &&
-          link.toString().contains(redirectUri)) {
-        var accessToken = linkStr.split('access_token=')[1].split('&')[0];
+      if (linkStr.contains('code')) {
+        var code = linkStr.split('code=')[1].replaceAll('#_', "");
+        _sub.cancel();
+        var auth = 'Basic '+base64Encode(utf8.encode('$redditClientID:'));
+        var result = await http
+            .post(Uri.parse('$redditAPIBaseURL/access_token'), headers: {
+          "User-Agent": "Redditech/1.0.0 (by /u/redditech)",
+          "Authorization": auth
+        }, body: {
+          "grant_type": "authorization_code",
+          "code": code,
+          "redirect_uri": redirectUri,
+        });
+        var accessToken = jsonDecode(result.body)['access_token'];
         final prefs = await SharedPreferences.getInstance();
         await prefs.setString('access_token', accessToken);
-        _sub.cancel();
         print('accessToken $accessToken');
         print("User logged in!");
         Navigator.pushReplacement(
