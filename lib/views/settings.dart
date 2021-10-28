@@ -315,47 +315,60 @@ class _SettingsPageState extends State<SettingsPage> {
                 ),
               ),
             ),
-            Row(
-              children: [
-                Icon(
-                  Icons.location_on_outlined,
-                  color: Colors.grey,
-                ),
-                Container(
-                  padding: EdgeInsets.only(
-                    top: 20,
-                    left: 10,
-                  ),
-                  width: MediaQuery.of(context).size.width * 0.70,
-                  child: Text(
-                    "Country",
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 17,
+            InkWell(
+              onTap: () => {
+                print("salut"),
+                _countryEditModalBottomSheets(context),
+              },
+              child: Center(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      children: [
+                        Icon(
+                          Icons.location_on_outlined,
+                          color: Colors.grey,
+                        ),
+                        Container(
+                          padding: EdgeInsets.only(
+                            top: 20,
+                            left: 10,
+                          ),
+                          width: MediaQuery.of(context).size.width * 0.70,
+                          child: Text(
+                            "Country",
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 17,
+                            ),
+                          ),
+                        ),
+                        Text(
+                          currentSelectedCountryCode,
+                          style: TextStyle(
+                            color: Colors.grey,
+                          ),
+                        ),
+                        Icon(
+                          Icons.arrow_forward,
+                          color: Colors.white,
+                        ),
+                      ],
                     ),
-                  ),
-                ),
-                Text(
-                  currentSelectedCountryName,
-                  style: TextStyle(
-                    color: Colors.grey,
-                  ),
-                ),
-                Icon(
-                  Icons.arrow_forward,
-                  color: Colors.white,
-                ),
-              ],
-            ),
-            Container(
-              padding: EdgeInsets.only(
-                left: 35,
-              ),
-              width: MediaQuery.of(context).size.width * 0.80,
-              child: Text(
-                "This is your primary location.",
-                style: TextStyle(
-                  color: Colors.grey,
+                    Container(
+                      padding: EdgeInsets.only(
+                        left: 35,
+                      ),
+                      width: MediaQuery.of(context).size.width * 0.80,
+                      child: Text(
+                        "This is your primary location.",
+                        style: TextStyle(
+                          color: Colors.grey,
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
               ),
             ),
@@ -376,6 +389,91 @@ class _SettingsPageState extends State<SettingsPage> {
       ),
       body: Center(
         child: isLoading ? CircularProgressIndicator() : mySettings(),
+      ),
+    );
+  }
+
+  void _countryEditModalBottomSheets(context) {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      isDismissible: true,
+      backgroundColor: Colors.black,
+      builder: (context) => DraggableScrollableSheet(
+        expand: false,
+        initialChildSize: 0.8,
+        minChildSize: 0.5,
+        maxChildSize: 0.8,
+        builder: (context, scrollController) => CustomScrollView(
+          controller: scrollController,
+          slivers: <Widget>[
+            SliverList(
+              delegate: SliverChildBuilderDelegate(
+                (context, int index) {
+                  return Container(
+                    margin: const EdgeInsets.only(
+                      bottom: 2.0,
+                    ),
+                    padding: EdgeInsets.only(
+                      left: 15.0,
+                      right: 15,
+                      bottom: 10,
+                      top: 5,
+                    ),
+                    color: Color(0xff202020),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Row(
+                          children: [
+                            Radio<String>(
+                              value: countries[index]["code"],
+                              groupValue: currentSelectedCountryCode,
+                              onChanged: (value) {
+                                setState(() {
+                                  print("val = $value");
+                                  currentSelectedCountryCode = value!;
+                                  currentSelectedCountryName =
+                                      countries[index]["name"];
+                                });
+                                Navigator.of(context).pop();
+                              },
+                            ),
+                            Text(
+                              countries[index]["name"],
+                              style: TextStyle(
+                                color: Colors.white,
+                              ),
+                            ),
+                          ],
+                        ),
+                        // ListTile(
+                        //   title: Text(
+                        //     countries[index]["name"],
+                        //     style: TextStyle(
+                        //       color: Colors.white,
+                        //     ),
+                        //   ),
+                        //   leading: Radio<String>(
+                        //     value: countries[index]["code"],
+                        //     groupValue: countries[index]["code"],
+                        //     onChanged: (value) {
+                        //       setState(() {
+                        //         // currentSelectedCountryName = value;
+                        //         print("val = $value");
+                        //       });
+                        //     },
+                        //   ),
+                        // ),
+                      ],
+                    ),
+                  );
+                },
+                childCount: countries.length,
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
