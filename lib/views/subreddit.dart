@@ -58,7 +58,7 @@ class _SubRedditPageState extends State<SubRedditPage> {
               children: [
                 Container(
                   child: CachedNetworkImage(
-                    height: 100,
+                    height: 60,
                     fit: BoxFit.cover,
                     imageUrl: this.about['mobile_banner_image'],
                     placeholder: (context, url) => CircularProgressIndicator(),
@@ -73,7 +73,7 @@ class _SubRedditPageState extends State<SubRedditPage> {
                     children: [
                       CachedNetworkImage(
                         imageUrl: this.about['icon_img'],
-                        height: 100,
+                        height: 80,
                         progressIndicatorBuilder:
                             (context, url, downloadProgress) => Center(
                           child: CircularProgressIndicator(
@@ -98,6 +98,7 @@ class _SubRedditPageState extends State<SubRedditPage> {
                                 this.about['public_description'],
                                 style: TextStyle(
                                     fontSize: 15, color: Colors.white),
+                                overflow: TextOverflow.ellipsis,
                               ),
                               Text(
                                 '${convertNumberToStringWithSpaces(this.about['subscribers'])} Members',
@@ -127,7 +128,7 @@ class _SubRedditPageState extends State<SubRedditPage> {
                   ),
                 ),
                 Container(
-                  height: MediaQuery.of(context).size.height * 0.48,
+                  height: MediaQuery.of(context).size.height * 0.64,
                   color: Colors.black,
                   child: DefaultTabController(
                     length: 3,
