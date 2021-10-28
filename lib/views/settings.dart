@@ -424,28 +424,43 @@ class _SettingsPageState extends State<SettingsPage> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Row(
-                          children: [
-                            Radio<String>(
-                              value: countries[index]["code"],
-                              groupValue: currentSelectedCountryCode,
-                              onChanged: (value) {
-                                setState(() {
-                                  print("val = $value");
-                                  currentSelectedCountryCode = value!;
-                                  currentSelectedCountryName =
-                                      countries[index]["name"];
-                                });
-                                Navigator.of(context).pop();
-                              },
-                            ),
-                            Text(
-                              countries[index]["name"],
-                              style: TextStyle(
-                                color: Colors.white,
+                        InkWell(
+                          onTap: () {
+                            setState(() {
+                              currentSelectedCountryCode =
+                                  countries[index]["code"];
+                              currentSelectedCountryName =
+                                  countries[index]["name"];
+                            });
+                            APISettings()
+                                .setCountryCode(countries[index]["code"]);
+                            Navigator.of(context).pop();
+                          },
+                          child: Row(
+                            children: [
+                              Radio<String>(
+                                value: countries[index]["code"],
+                                groupValue: currentSelectedCountryCode,
+                                onChanged: (value) {
+                                  setState(() {
+                                    print("val = $value");
+                                    currentSelectedCountryCode = value!;
+                                    currentSelectedCountryName =
+                                        countries[index]["name"];
+                                  });
+                                  APISettings()
+                                      .setCountryCode(countries[index]["code"]);
+                                  Navigator.of(context).pop();
+                                },
                               ),
-                            ),
-                          ],
+                              Text(
+                                countries[index]["name"],
+                                style: TextStyle(
+                                  color: Colors.white,
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
                         // ListTile(
                         //   title: Text(
