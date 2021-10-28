@@ -4,6 +4,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:redditech/api/endpoints/subreddit.dart';
 import 'package:redditech/utils/convert.dart';
+import 'package:redditech/widgets/subreddit_post.dart';
 
 var text = '';
 
@@ -19,6 +20,12 @@ class SubRedditPage extends StatefulWidget {
 class _SubRedditPageState extends State<SubRedditPage> {
   var isLoading = true;
   var about = {};
+  var bestPosts = [];
+  var hotPosts = [];
+  var topPosts = [];
+  var isSubscribed = false;
+
+  late APISubreddit apiSubReddit;
 
   @override
   void initState() {
@@ -27,13 +34,16 @@ class _SubRedditPageState extends State<SubRedditPage> {
   }
 
   void loadData() async {
-    var apiSubReddit = APISubreddit(widget.subreddit);
-    await apiSubReddit.fetch();
+    this.apiSubReddit = APISubreddit(widget.subreddit);
+    await this.apiSubReddit.fetch();
     setState(() {
-      about = apiSubReddit.getAbout();
+      about = this.apiSubReddit.getAbout();
+      bestPosts = this.apiSubReddit.getBestPosts();
+      hotPosts = this.apiSubReddit.getHotPosts();
+      topPosts = this.apiSubReddit.getTopPosts();
+      isSubscribed = this.apiSubReddit.isSubscribed();
       isLoading = false;
     });
-    inspect(this.about);
   }
 
   @override
@@ -44,6 +54,7 @@ class _SubRedditPageState extends State<SubRedditPage> {
       body: isLoading
           ? Center(child: CircularProgressIndicator())
           : Column(
+              mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 Container(
                   child: CachedNetworkImage(
@@ -86,20 +97,121 @@ class _SubRedditPageState extends State<SubRedditPage> {
                               Text(
                                 this.about['public_description'],
                                 style: TextStyle(
-                                    fontSize: 15,
-                                    color: Colors.white),
+                                    fontSize: 15, color: Colors.white),
                               ),
                               Text(
                                 '${convertNumberToStringWithSpaces(this.about['subscribers'])} Members',
                                 style: TextStyle(
-                                    fontSize: 15,
-                                    color: Colors.white),
+                                    fontSize: 15, color: Colors.white),
                               ),
                             ],
                           ),
                         ),
                       ),
+                      ElevatedButton(
+                        onPressed: () => {
+                          if (!isSubscribed)
+                            apiSubReddit.subscribe()
+                          else
+                            apiSubReddit.unSubscribe(),
+                          setState(() {
+                            isSubscribed = !isSubscribed;
+                          })
+                        },
+                        child: Text(
+                          isSubscribed ? 'Leave' : 'Join',
+                          style: TextStyle(color: Colors.white),
+                        ),
+                      )
                     ],
+                  ),
+                ),
+                Container(
+                  height: MediaQuery.of(context).size.height * 0.48,
+                  color: Colors.black,
+                  child: DefaultTabController(
+                    length: 3,
+                    child: Scaffold(
+                      appBar: AppBar(
+                        backgroundColor: Colors.black,
+                        toolbarHeight:
+                            MediaQuery.of(context).size.height * 0.05,
+                        automaticallyImplyLeading: false,
+                        flexibleSpace: Column(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: [
+                            TabBar(
+                              indicatorWeight: 3,
+                              tabs: [
+                                Text(
+                                  "Bests",
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 15,
+                                  ),
+                                ),
+                                Text(
+                                  "Hots",
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 15,
+                                  ),
+                                ),
+                                Text(
+                                  "Tops",
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 15,
+                                  ),
+                                ),
+                              ],
+                            )
+                          ],
+                        ),
+                      ),
+                      backgroundColor: Colors.black,
+                      body: TabBarView(
+                        children: <Widget>[
+                          CustomScrollView(
+                            slivers: <Widget>[
+                              SliverList(
+                                  delegate: SliverChildBuilderDelegate(
+                                      (BuildContext context, int index) {
+                                return SubRedditPost(
+                                  data: bestPosts[index]["data"],
+                                  showSubRedditName: false,
+                                );
+                              }, childCount: bestPosts.length))
+                            ],
+                          ),
+                          CustomScrollView(
+                            slivers: <Widget>[
+                              SliverList(
+                                delegate: SliverChildBuilderDelegate(
+                                    (BuildContext context, int index) {
+                                  return SubRedditPost(
+                                      data: hotPosts[index]["data"],
+                                      showSubRedditName: false);
+                                }, childCount: hotPosts.length),
+                              )
+                            ],
+                          ),
+                          CustomScrollView(
+                            slivers: <Widget>[
+                              SliverList(
+                                delegate: SliverChildBuilderDelegate(
+                                    (BuildContext context, int index) {
+                                  return SubRedditPost(
+                                    data: topPosts[index]["data"],
+                                    showSubRedditName: false,
+                                  );
+                                }, childCount: topPosts.length),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ),
                   ),
                 ),
               ],

@@ -5,8 +5,10 @@ import 'package:redditech/views/subreddit.dart';
 
 class SubRedditPost extends StatelessWidget {
   final data;
+  final showSubRedditName;
 
-  SubRedditPost({Key? key, required this.data}) : super(key: key);
+  SubRedditPost({Key? key, required this.data, this.showSubRedditName = true})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -16,33 +18,34 @@ class SubRedditPost extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          Container(
-            padding: EdgeInsets.only(left: 8.0, right: 15),
-            child: Row(
-              children: [
-                TextButton(
-                  child: Text(
-                    data["subreddit_name_prefixed"],
-                    style:
-                        TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold),
-                  ),
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
+          if (showSubRedditName)
+            Container(
+              padding: EdgeInsets.only(left: 8.0, right: 15),
+              child: Row(
+                children: [
+                  TextButton(
+                    child: Text(
+                      data["subreddit_name_prefixed"],
+                      style: TextStyle(
+                          fontSize: 20.0, fontWeight: FontWeight.bold),
+                    ),
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
                           builder: (context) => SubRedditPage(
-                                subreddit: data["subreddit_name_prefixed"],
-                              )),
-                    );
-                  },
-                ),
-                Spacer(),
-                // ElevatedButton(onPressed: () => {}, child: Text("Sub"))
-              ],
+                            subreddit: data["subreddit_name_prefixed"],
+                          ),
+                        ),
+                      );
+                    },
+                  ),
+                ],
+              ),
             ),
-          ),
           Container(
-            padding: EdgeInsets.only(left: 15.0, right: 15, bottom: 10),
+            padding:
+                EdgeInsets.only(left: 15.0, right: 15, bottom: 10, top: 10),
             child: Text(
               "u/" +
                   data["author"] +
