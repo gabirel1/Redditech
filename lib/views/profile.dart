@@ -40,6 +40,7 @@ class _ProfilePageState extends State<ProfilePage> {
   String karmaAwarderNumber = "";
   String karmaAwardeeNumber = "";
   List commentsList = [];
+  List posts = [];
 
   @override
   void initState() {
@@ -65,6 +66,7 @@ class _ProfilePageState extends State<ProfilePage> {
         karmaAwardeeNumber = apiProfile.getAwardeeKarma().toString();
         karmaPostNumber = apiProfile.getPostKarma().toString();
         commentsList = apiProfile.getComments();
+        posts = apiProfile.getPosts();
         isLoading = false;
       },
     );
@@ -375,6 +377,126 @@ class _ProfilePageState extends State<ProfilePage> {
     );
   }
 
+  Widget postss() {
+    return Container(
+      padding: EdgeInsets.only(
+        top: 2,
+      ),
+      child: CustomScrollView(
+        slivers: <Widget>[
+          SliverList(
+            delegate: SliverChildBuilderDelegate(
+              (BuildContext context, int index) {
+                return Container(
+                  margin: const EdgeInsets.only(
+                    bottom: 2.0,
+                  ),
+                  padding: EdgeInsets.only(
+                    left: 15.0,
+                    right: 15.0,
+                    bottom: 10,
+                    top: 5,
+                  ),
+                  color: Color(0xff202020),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        posts[index]["subreddit_name_prefixed"],
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 17,
+                        ),
+                      ),
+                      Row(
+                        children: [
+                          Text(
+                            posts[index]['subreddit_name_prefixed'] + " · ",
+                            style: TextStyle(
+                              color: Colors.grey,
+                              fontSize: 16,
+                            ),
+                          ),
+                          Text(
+                            timestampToString(posts[index]['created']) + " · ",
+                            style: TextStyle(
+                              color: Colors.grey,
+                              fontSize: 16,
+                            ),
+                          ),
+                          Text(
+                            posts[index]["domain"],
+                            style: TextStyle(
+                              color: Colors.grey,
+                              fontSize: 16,
+                            ),
+                          ),
+                        ],
+                      ),
+                      Padding(
+                        padding: EdgeInsets.only(
+                          top: 5,
+                        ),
+                      ),
+                      Row(
+                        children: [
+                          Container(
+                            width: MediaQuery.of(context).size.width * .635,
+                            child: Text(
+                              posts[index]["title"],
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 20,
+                              ),
+                            ),
+                          ),
+                          CachedNetworkImage(
+                            imageUrl: posts[index]["preview"]["images"][0]
+                                    ["resolutions"][0]["url"]
+                                .replaceAll("amp;", ""),
+                            height: 90,
+                            width: 120,
+                            progressIndicatorBuilder:
+                                (context, url, downloadProgress) => Center(
+                              child: CircularProgressIndicator(
+                                  value: downloadProgress.progress),
+                            ),
+                            errorWidget: (context, url, error) =>
+                                Icon(Icons.error),
+                          ),
+                        ],
+                      ),
+                      Row(
+                        children: [
+                          Icon(
+                            Icons.arrow_upward,
+                            color: Colors.orange,
+                          ),
+                          Padding(
+                            padding: EdgeInsets.only(
+                              left: 5,
+                            ),
+                          ),
+                          Text(
+                            posts[index]["score"].toString(),
+                            style: TextStyle(
+                              fontSize: 18,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                );
+              },
+              childCount: posts.length,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -564,11 +686,12 @@ class _ProfilePageState extends State<ProfilePage> {
                         backgroundColor: Colors.black,
                         body: TabBarView(
                           children: <Widget>[
-                            Icon(
-                              Icons.directions_transit,
-                              color: Colors.white,
-                              size: 50,
-                            ),
+                            // Icon(
+                            //   Icons.directions_transit,
+                            //   color: Colors.white,
+                            //   size: 50,
+                            // ),
+                            postss(),
                             comment(),
                             about(),
                             // comment(),
