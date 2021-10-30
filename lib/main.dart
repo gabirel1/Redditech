@@ -86,8 +86,7 @@ class _MainPageState extends State<MainPage> {
   String lastSearchText = '';
 
   openSearchPage(String text) {
-    if (text == lastSearchText)
-      return;
+    if (text == lastSearchText) return;
     lastSearchText = text;
     Navigator.push(
       context,
@@ -145,7 +144,7 @@ class _MainPageState extends State<MainPage> {
                         height: 30,
                         width: 30,
                       ),
-                    )
+                    ),
                 ],
               ),
             ),

@@ -4,7 +4,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:redditech/utils/convert.dart';
 import 'package:redditech/views/subreddit.dart';
-import '/api/endpoints/search.dart';
+import 'package:redditech/api/endpoints/search.dart';
 
 class SearchPage extends StatefulWidget {
   SearchPage({Key? key, this.text = ''}) : super(key: key);
@@ -123,7 +123,8 @@ class _SearchPageState extends State<SearchPage> {
                                   Text(
                                     convertNumberToStringWithSpaces(
                                             searchResults[index]['data']
-                                                ['subscribers'] ?? 0) +
+                                                    ['subscribers'] ??
+                                                0) +
                                         ' members',
                                     style: TextStyle(fontSize: 14),
                                   ),

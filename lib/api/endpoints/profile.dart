@@ -6,6 +6,7 @@ import 'package:redditech/api/utils.dart';
 class APIProfile {
   var data;
   var comments;
+  var posts;
 
   APIProfile();
 
@@ -15,6 +16,8 @@ class APIProfile {
       data = jsonDecode(response.body);
       var response2 = await getAPI("user/" + data["name"] + "/comments");
       comments = jsonDecode(response2.body);
+      var response3 = await getAPI("user/" + data["name"] + "/submitted");
+      posts = jsonDecode(response3.body);
     } catch (_) {
       data = [];
       return false;
@@ -108,6 +111,14 @@ class APIProfile {
       arr.add(comments["data"]["children"][i]["data"]);
       // var body = comments["data"]["children"][i]["data"]["body"];
       // print("body == $body");
+    }
+    return arr;
+  }
+
+  getPosts() {
+    List arr = [];
+    for (int i = 0; i < posts["data"]["children"].length; i++) {
+      arr.add(posts["data"]["children"][i]["data"]);
     }
     return arr;
   }
