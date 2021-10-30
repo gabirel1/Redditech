@@ -74,67 +74,70 @@ class _SearchPageState extends State<SearchPage> {
         ],
       ),
       body: Center(
-        child: CustomScrollView(
-          slivers: <Widget>[
-            SliverList(
-              delegate:
-                  SliverChildBuilderDelegate((BuildContext context, int index) {
-                return GestureDetector(
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => SubRedditPage(
-                                subreddit: searchResults[index]['data']
-                                    ["display_name_prefixed"],
-                              )),
-                    );
-                  },
-                  child: Container(
-                    padding: EdgeInsets.all(10),
-                    child: Row(
-                      children: [
-                        Container(
-                          margin: EdgeInsets.only(right: 20),
-                          child: CachedNetworkImage(
-                            width: 36,
-                            imageUrl: searchResults[index]['data']['icon_img'].length > 0
-                                ? searchResults[index]['data']['icon_img']
-                                : 'https://www.redditstatic.com/icon.png',
-                            progressIndicatorBuilder:
-                                (context, url, downloadProgress) =>
-                                    CircularProgressIndicator(
-                                        value: downloadProgress.progress),
-                            errorWidget: (context, url, error) =>
-                                Icon(Icons.error),
+        child: searchResults.length > 0
+            ? CustomScrollView(
+                slivers: <Widget>[
+                  SliverList(
+                    delegate: SliverChildBuilderDelegate(
+                        (BuildContext context, int index) {
+                      return GestureDetector(
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => SubRedditPage(
+                                      subreddit: searchResults[index]['data']
+                                          ["display_name_prefixed"],
+                                    )),
+                          );
+                        },
+                        child: Container(
+                          padding: EdgeInsets.all(10),
+                          child: Row(
+                            children: [
+                              Container(
+                                margin: EdgeInsets.only(right: 20),
+                                child: CachedNetworkImage(
+                                  width: 36,
+                                  imageUrl: searchResults[index]['data']
+                                          ['icon_img'] ??
+                                      'https://www.redditstatic.com/icon.png',
+                                  progressIndicatorBuilder:
+                                      (context, url, downloadProgress) =>
+                                          CircularProgressIndicator(
+                                              value: downloadProgress.progress),
+                                  errorWidget: (context, url, error) =>
+                                      Icon(Icons.error),
+                                ),
+                              ),
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    searchResults[index]['data']
+                                        ['display_name_prefixed'],
+                                    style: TextStyle(
+                                        fontSize: 18,
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                  Text(
+                                    convertNumberToStringWithSpaces(
+                                            searchResults[index]['data']
+                                                ['subscribers'] ?? 0) +
+                                        ' members',
+                                    style: TextStyle(fontSize: 14),
+                                  ),
+                                ],
+                              ),
+                            ],
                           ),
                         ),
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              searchResults[index]['data']
-                                  ['display_name_prefixed'],
-                              style: TextStyle(
-                                  fontSize: 18, fontWeight: FontWeight.bold),
-                            ),
-                            Text(
-                              convertNumberToStringWithSpaces(
-                                      searchResults[index]['data']
-                                          ['subscribers']) +
-                                  ' members',
-                              style: TextStyle(fontSize: 14),
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
-                  ),
-                );
-              }, childCount: searchResults.length),
-            )
-          ],
-        ),
+                      );
+                    }, childCount: searchResults.length),
+                  )
+                ],
+              )
+            : Text("No results"),
       ),
     );
   }

@@ -84,6 +84,7 @@ class _SubRedditPageState extends State<SubRedditPage> {
                       Expanded(
                         child: Container(
                           padding: EdgeInsets.all(10),
+                          height: 86,
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
@@ -93,9 +94,11 @@ class _SubRedditPageState extends State<SubRedditPage> {
                                     fontSize: 20,
                                     fontWeight: FontWeight.bold,
                                     color: Colors.white),
+                                overflow: TextOverflow.ellipsis,
                               ),
                               Text(
-                                this.about['public_description'],
+                                this.about['public_description'].replaceAll(
+                                    '\n', '   '),
                                 style: TextStyle(
                                     fontSize: 15, color: Colors.white),
                                 overflow: TextOverflow.ellipsis,
