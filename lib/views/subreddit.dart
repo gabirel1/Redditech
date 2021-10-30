@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:redditech/api/endpoints/subreddit.dart';
 import 'package:redditech/utils/convert.dart';
 import 'package:redditech/widgets/subreddit_post.dart';
+import 'package:redditech/widgets/subreddit_post_list.dart';
 
 var text = '';
 
@@ -97,8 +98,9 @@ class _SubRedditPageState extends State<SubRedditPage> {
                                 overflow: TextOverflow.ellipsis,
                               ),
                               Text(
-                                this.about['public_description'].replaceAll(
-                                    '\n', '   '),
+                                this
+                                    .about['public_description']
+                                    .replaceAll('\n', '   '),
                                 style: TextStyle(
                                     fontSize: 15, color: Colors.white),
                                 overflow: TextOverflow.ellipsis,
@@ -176,42 +178,17 @@ class _SubRedditPageState extends State<SubRedditPage> {
                       backgroundColor: Colors.black,
                       body: TabBarView(
                         children: <Widget>[
-                          CustomScrollView(
-                            slivers: <Widget>[
-                              SliverList(
-                                  delegate: SliverChildBuilderDelegate(
-                                      (BuildContext context, int index) {
-                                return SubRedditPost(
-                                  data: bestPosts[index]["data"],
-                                  showSubRedditName: false,
-                                );
-                              }, childCount: bestPosts.length))
-                            ],
+                          SubRedditPostList(
+                            posts: bestPosts,
+                            showSubRedditName: false,
                           ),
-                          CustomScrollView(
-                            slivers: <Widget>[
-                              SliverList(
-                                delegate: SliverChildBuilderDelegate(
-                                    (BuildContext context, int index) {
-                                  return SubRedditPost(
-                                      data: hotPosts[index]["data"],
-                                      showSubRedditName: false);
-                                }, childCount: hotPosts.length),
-                              )
-                            ],
+                          SubRedditPostList(
+                            posts: hotPosts,
+                            showSubRedditName: false,
                           ),
-                          CustomScrollView(
-                            slivers: <Widget>[
-                              SliverList(
-                                delegate: SliverChildBuilderDelegate(
-                                    (BuildContext context, int index) {
-                                  return SubRedditPost(
-                                    data: topPosts[index]["data"],
-                                    showSubRedditName: false,
-                                  );
-                                }, childCount: topPosts.length),
-                              ),
-                            ],
+                          SubRedditPostList(
+                            posts: topPosts,
+                            showSubRedditName: false,
                           ),
                         ],
                       ),

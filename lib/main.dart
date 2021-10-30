@@ -3,6 +3,7 @@ import 'package:redditech/api/endpoints/profile.dart';
 import 'package:redditech/views/login.dart';
 import 'package:redditech/views/profile.dart';
 import 'package:redditech/views/search.dart';
+import 'package:redditech/widgets/subreddit_post_list.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'api/endpoints/subreddits.dart';
@@ -182,35 +183,9 @@ class _MainPageState extends State<MainPage> {
               ? Center(child: CircularProgressIndicator())
               : TabBarView(
                   children: <Widget>[
-                    CustomScrollView(
-                      slivers: <Widget>[
-                        SliverList(
-                            delegate: SliverChildBuilderDelegate(
-                                (BuildContext context, int index) {
-                          return SubRedditPost(data: subsBest[index]["data"]);
-                        }, childCount: subsBest.length))
-                      ],
-                    ),
-                    CustomScrollView(
-                      slivers: <Widget>[
-                        SliverList(
-                          delegate: SliverChildBuilderDelegate(
-                              (BuildContext context, int index) {
-                            return SubRedditPost(data: subsHot[index]["data"]);
-                          }, childCount: subsHot.length),
-                        )
-                      ],
-                    ),
-                    CustomScrollView(
-                      slivers: <Widget>[
-                        SliverList(
-                          delegate: SliverChildBuilderDelegate(
-                              (BuildContext context, int index) {
-                            return SubRedditPost(data: subsTop[index]["data"]);
-                          }, childCount: subsTop.length),
-                        ),
-                      ],
-                    ),
+                    SubRedditPostList(posts: subsBest),
+                    SubRedditPostList(posts: subsHot),
+                    SubRedditPostList(posts: subsTop),
                   ],
                 ),
         ),
