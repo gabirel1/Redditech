@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:better_player/better_player.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carousel_slider/carousel_slider.dart';
@@ -22,9 +20,6 @@ class _SubRedditPostState extends State<SubRedditPost> {
   @override
   void initState() {
     super.initState();
-    if (widget.data["title"].contains("Dexter")) {
-      inspect(widget.data);
-    }
   }
 
   @override
@@ -108,7 +103,7 @@ class _SubRedditPostState extends State<SubRedditPost> {
                     )),
                     errorWidget: (context, url, error) => Icon(Icons.error),
                   )
-                else if (widget.data["is_gallery"] != null)
+                else if (widget.data["is_gallery"] != null && widget.data["gallery_data"] != null)
                   CarouselSlider(
                     options: CarouselOptions(),
                     items: widget.data["gallery_data"]["items"]

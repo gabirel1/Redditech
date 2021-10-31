@@ -1,10 +1,7 @@
-import 'dart:developer';
-
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:redditech/api/endpoints/subreddit.dart';
 import 'package:redditech/utils/convert.dart';
-import 'package:redditech/widgets/subreddit_post.dart';
 import 'package:redditech/widgets/subreddit_post_list.dart';
 
 var text = '';
@@ -21,9 +18,6 @@ class SubRedditPage extends StatefulWidget {
 class _SubRedditPageState extends State<SubRedditPage> {
   var isLoading = true;
   var about = {};
-  var bestPosts = [];
-  var hotPosts = [];
-  var topPosts = [];
   var isSubscribed = false;
 
   late APISubreddit apiSubReddit;
@@ -39,9 +33,6 @@ class _SubRedditPageState extends State<SubRedditPage> {
     await this.apiSubReddit.fetch();
     setState(() {
       about = this.apiSubReddit.getAbout();
-      bestPosts = this.apiSubReddit.getBestPosts();
-      hotPosts = this.apiSubReddit.getHotPosts();
-      topPosts = this.apiSubReddit.getTopPosts();
       isSubscribed = this.apiSubReddit.isSubscribed();
       isLoading = false;
     });
@@ -179,15 +170,18 @@ class _SubRedditPageState extends State<SubRedditPage> {
                       body: TabBarView(
                         children: <Widget>[
                           SubRedditPostList(
-                            posts: bestPosts,
+                            loadFunc: (after) async =>
+                                await apiSubReddit.fetchPosts("best", after),
                             showSubRedditName: false,
                           ),
                           SubRedditPostList(
-                            posts: hotPosts,
+                            loadFunc: (after) async =>
+                                await apiSubReddit.fetchPosts("hot", after),
                             showSubRedditName: false,
                           ),
                           SubRedditPostList(
-                            posts: topPosts,
+                            loadFunc: (after) async =>
+                                await apiSubReddit.fetchPosts("top", after),
                             showSubRedditName: false,
                           ),
                         ],

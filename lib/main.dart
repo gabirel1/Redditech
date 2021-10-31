@@ -50,6 +50,7 @@ class _MainPageState extends State<MainPage> {
   var subsBest = [];
   var subsHot = [];
   var subsTop = [];
+  APISubreddits apiSubreddits = APISubreddits();
 
   @override
   void initState() {
@@ -58,13 +59,12 @@ class _MainPageState extends State<MainPage> {
   }
 
   void loadSubs() async {
-    APISubreddits apiSubreddits = APISubreddits();
-    await apiSubreddits.fetch();
+    // await apiSubreddits.fetch();
     setState(() {
       isLoading = false;
-      subsBest = apiSubreddits.getBestSubs();
-      subsHot = apiSubreddits.getHotSubs();
-      subsTop = apiSubreddits.getTopSubs();
+      // subsBest = apiSubreddits.getBestSubs();
+      // subsHot = apiSubreddits.getHotSubs();
+      // subsTop = apiSubreddits.getTopSubs();
     });
   }
 
@@ -183,9 +183,15 @@ class _MainPageState extends State<MainPage> {
               ? Center(child: CircularProgressIndicator())
               : TabBarView(
                   children: <Widget>[
-                    SubRedditPostList(posts: subsBest),
-                    SubRedditPostList(posts: subsHot),
-                    SubRedditPostList(posts: subsTop),
+                    SubRedditPostList(
+                        loadFunc: (after) async =>
+                            await apiSubreddits.fetchPosts("best", after)),
+                    SubRedditPostList(
+                        loadFunc: (after) async =>
+                            await apiSubreddits.fetchPosts("hot", after)),
+                    SubRedditPostList(
+                        loadFunc: (after) async =>
+                            await apiSubreddits.fetchPosts("top", after)),
                   ],
                 ),
         ),
