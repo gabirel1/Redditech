@@ -69,7 +69,7 @@ class _LoginPageState extends State<LoginPage> {
       if (linkStr.contains('code')) {
         var code = linkStr.split('code=')[1].replaceAll('#_', "");
         _sub.cancel();
-        var auth = 'Basic '+base64Encode(utf8.encode('$redditClientID:'));
+        var auth = 'Basic ' + base64Encode(utf8.encode('$redditClientID:'));
         var result = await http
             .post(Uri.parse('$redditAPIBaseURL/access_token'), headers: {
           "User-Agent": "Redditech/1.0.0 (by /u/redditech)",
@@ -113,7 +113,7 @@ class _LoginPageState extends State<LoginPage> {
           child: isLoading
               ? CircularProgressIndicator()
               : ElevatedButton(
-                  child: Text("Se connecter"),
+                  child: Text("Sign In"),
                   onPressed: () => login(),
                 ),
         ));

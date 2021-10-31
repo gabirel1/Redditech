@@ -1,16 +1,56 @@
 # redditech
 
-A new Flutter project.
+A reddit like application using the reddit API.
 
-## Getting Started
+The goal of this project is to use the reddit API to implement features using the reddit API like : Login using reddit OAuth, subscribe to subreddits, search for subreddits, eddit users settings, etc.
 
-This project is a starting point for a Flutter application.
+# Dependencies
 
-A few resources to get you started if this is your first Flutter project:
+- Flutter
+- Android SDKs
 
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
+# Usefull vscode extensions
+- dart-code.dart-code
+- dart-code.flutter
 
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+
+# How to launch a debug version
+- Option1 : Open the project inside Android Studio and install all flutter related dependencies, then run the app with the debug mode
+- Option2 : Open the project inside visual studio and install all usefull flutter related extensions, then connect either a physical device or emulator and run the app with the debug mode
+
+_______________________________
+# Characteristics
+
+## Connection :
+***
+<p align="center">
+<img src="readme_assets/Screenshot_2021-10-31-14-47-50-513_com.dogito.redditech.jpg" width=50%/>
+</p>
+
+## See posts from subreddits you are subbed to
+***
+
+<p align="center">
+<img src="readme_assets/Screenshot_2021-10-31-15-09-56-446_com.dogito.redditech.jpg" width=50%/>
+</p>
+
+## Search for subreddits, see their description and their posts + subscribe or unsubscribe to them
+***
+
+<p align="center">
+<img src="readme_assets/Screenshot_2021-10-31-15-10-12-240_com.dogito.redditech.jpg" width=50%/>
+</p>
+
+## See your profile
+***
+
+<p align="center">
+<img src="readme_assets/Screenshot_2021-10-31-15-10-50-653_com.dogito.redditech.jpg" width=50%/>
+</p>
+
+## Update your settings
+***
+
+<p align="center">
+<img src="readme_assets/Screenshot_2021-10-31-15-11-05-208_com.dogito.redditech.jpg" width=50%/>
+</p>
