@@ -13,10 +13,24 @@ The goal of this project is to use the reddit API to implement features using th
 - dart-code.dart-code
 - dart-code.flutter
 
+# Testing policy
+### How to test
+- Go to `test/`
+- Run the tests using the command `flutter test`
+
+### How to add tests
+- Go to `test/`
+- Edit `widget_test.dart` file and start writing your tests
+
+### See also
+- https://flutter.dev/docs/testing
+- https://pub.dev/packages/test
 
 # How to launch a debug version
 - Option1 : Open the project inside Android Studio and install all flutter related dependencies, then run the app with the debug mode
 - Option2 : Open the project inside visual studio and install all usefull flutter related extensions, then connect either a physical device or emulator and run the app with the debug mode
+
+- You may need to run `flutter get` to install the dependencies
 
 _______________________________
 # Characteristics
